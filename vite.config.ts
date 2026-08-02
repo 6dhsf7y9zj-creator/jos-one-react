@@ -4,5 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/jos-one-react/',
-  test: { environment: 'jsdom' }
+  test: {
+    environment: 'node',
+  },
 })
