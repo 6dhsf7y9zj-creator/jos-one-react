@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import addItemSource from './components/AddItem.tsx?raw'
+import automationSource from './components/AutomationCentre.tsx?raw'
 import backupSource from './components/BackupCenter.tsx?raw'
 import brandSource from './components/BrandPerformanceCentre.tsx?raw'
 import forecastSource from './components/BusinessForecastingCentre.tsx?raw'
@@ -18,6 +19,7 @@ import sourceCheckSource from './components/SourceCheck.tsx?raw'
 describe('App component completeness', () => {
   it('includes every component imported by App.tsx', () => {
     expect(addItemSource).toContain('export function AddItem')
+    expect(automationSource).toContain('export function AutomationCentre')
     expect(backupSource).toContain('export function BackupCenter')
     expect(brandSource).toContain('export function BrandPerformanceCentre')
     expect(forecastSource).toContain('export function BusinessForecastingCentre')

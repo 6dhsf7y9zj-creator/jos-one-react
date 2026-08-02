@@ -8,6 +8,7 @@ import {
   estimateSnapshotBytes,
   findAutoBackup,
   getAutoBackups,
+  LAST_OFF_DEVICE_EXPORT_KEY,
   saveAutoBackup,
   type AutoBackupSnapshot,
 } from '../lib/autoBackup'
@@ -28,7 +29,6 @@ type Comparison = {
 }
 
 const UNDO_SNAPSHOT_KEY = 'jos-one-react-last-recovery-checkpoint'
-const LAST_EXPORT_KEY = 'jos-one-react-last-off-device-export'
 const OFF_DEVICE_REMINDER_DAYS = 7
 
 function downloadJson(backup: JosBackup, filename: string): void {
@@ -118,7 +118,7 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
   const [recoveryOpen, setRecoveryOpen] = useState(false)
   const [lastOffDeviceExport, setLastOffDeviceExport] = useState<string | null>(() => {
     try {
-      return localStorage.getItem(LAST_EXPORT_KEY)
+      return localStorage.getItem(LAST_OFF_DEVICE_EXPORT_KEY)
     } catch {
       return null
     }
@@ -212,7 +212,7 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
     const exportedAt = new Date().toISOString()
     setLastOffDeviceExport(exportedAt)
     try {
-      localStorage.setItem(LAST_EXPORT_KEY, exportedAt)
+      localStorage.setItem(LAST_OFF_DEVICE_EXPORT_KEY, exportedAt)
     } catch {
       // The download still succeeds even when the reminder timestamp cannot be saved.
     }

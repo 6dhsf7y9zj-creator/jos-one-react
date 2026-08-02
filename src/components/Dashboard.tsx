@@ -6,6 +6,8 @@ import { formatFinanceMoney } from '../lib/finance'
 import { calculateBrandPerformance } from '../lib/brandPerformance'
 import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
 import { calculateBusinessForecast } from '../lib/businessForecasting'
+import { calculateAutomationReport } from '../lib/automationCentre'
+import { getAutoBackups, getLastOffDeviceExportAt } from '../lib/autoBackup'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -19,6 +21,7 @@ type DashboardProps = {
   onOpenBrandPerformance: () => void
   onOpenRecommendations: () => void
   onOpenForecasting: () => void
+  onOpenAutomation: () => void
 }
 
 function greeting(): string {
@@ -50,6 +53,7 @@ export function Dashboard({
   onOpenBrandPerformance,
   onOpenRecommendations,
   onOpenForecasting,
+  onOpenAutomation,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
@@ -71,6 +75,15 @@ export function Dashboard({
       scenario: 'base',
       horizonWeeks: 12,
       monthlyProfitTarget: settings.monthlyProfitTarget ?? 5000,
+    },
+  )
+  const automation = calculateAutomationReport(
+    items,
+    orders,
+    settings,
+    {
+      latestAutoBackupAt: getAutoBackups()[0]?.createdAt,
+      lastOffDeviceExportAt: getLastOffDeviceExportAt(),
     },
   )
   const topBrands = brandPerformance.brands.slice(0, 4)
@@ -150,6 +163,25 @@ export function Dashboard({
         </div>
         <JosButton variant="secondary" fullWidth onClick={onOpenForecasting}>
           Open forecasting engine
+        </JosButton>
+      </section>
+
+      <section className="ceo-automation-summary">
+        <div>
+          <p className="eyebrow">AUTOMATION CENTRE</p>
+          <h2>{automation.dueCount + automation.overdueCount} routines need attention</h2>
+          <p>
+            {automation.alerts.length} live alerts · {automation.completedLast7Days} routines completed
+            in the last seven days
+          </p>
+        </div>
+        <div className="ceo-automation-metrics">
+          <span><strong>{automation.overdueCount}</strong>overdue</span>
+          <span><strong>{automation.launch.progress}%</strong>launch readiness</span>
+          <span><strong>{automation.launch.daysRemaining}</strong>days to launch</span>
+        </div>
+        <JosButton variant="secondary" fullWidth onClick={onOpenAutomation}>
+          Open Automation Centre
         </JosButton>
       </section>
 

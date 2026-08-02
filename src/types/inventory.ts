@@ -124,10 +124,44 @@ export interface FinanceState {
   transactions: FinanceTransaction[];
 }
 
+
+export type AutomationRuleId =
+  | 'daily-ceo-review'
+  | 'weekly-backup-check'
+  | 'weekly-ageing-review'
+  | 'weekly-finance-check'
+  | 'weekly-launch-review';
+
+export interface AutomationRuleState {
+  id: AutomationRuleId;
+  enabled: boolean;
+  lastCompletedAt?: string;
+  snoozedUntil?: string;
+}
+
+export interface AutomationHistoryEntry {
+  id: string;
+  ruleId: AutomationRuleId;
+  completedAt: string;
+}
+
+export interface LaunchChecklistState {
+  id: string;
+  completedAt?: string;
+}
+
+export interface AutomationSettings {
+  rules: AutomationRuleState[];
+  launchDate: string;
+  launchChecklist: LaunchChecklistState[];
+  history: AutomationHistoryEntry[];
+}
+
 export interface JosSettings {
   minimumProfit: number;
   targetRoi: number;
   storageLocations: string[];
   monthlyProfitTarget?: number;
+  automation?: AutomationSettings;
   finance?: FinanceState;
 }

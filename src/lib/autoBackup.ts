@@ -2,6 +2,7 @@ import { createBackup, type JosBackup } from './backup'
 import type { InventoryItem, JosSettings, OrderRecord } from '../types/inventory'
 
 const AUTO_BACKUP_KEY = 'jos-one-react-auto-backups'
+export const LAST_OFF_DEVICE_EXPORT_KEY = 'jos-one-react-last-off-device-export'
 const MAX_SNAPSHOTS = 10
 
 export type AutoBackupSnapshot = {
@@ -118,4 +119,13 @@ export function estimateAllSnapshotBytes(): number {
 
 export function findAutoBackup(id: string): AutoBackupSnapshot | undefined {
   return getAutoBackups().find(snapshot => snapshot.id === id)
+}
+
+
+export function getLastOffDeviceExportAt(): string | undefined {
+  try {
+    return localStorage.getItem(LAST_OFF_DEVICE_EXPORT_KEY) ?? undefined
+  } catch {
+    return undefined
+  }
 }

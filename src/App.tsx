@@ -15,8 +15,10 @@ import { InventoryIntelligenceEngine } from './components/InventoryIntelligenceE
 import { BrandPerformanceCentre } from './components/BrandPerformanceCentre'
 import { CeoRecommendationCentre } from './components/CeoRecommendationCentre'
 import { BusinessForecastingCentre } from './components/BusinessForecastingCentre'
+import { AutomationCentre } from './components/AutomationCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
+import { createDefaultAutomationSettings } from './lib/automationCentre'
 
 const seed: InventoryItem[] = [
   {
@@ -36,6 +38,7 @@ const defaultSettings: JosSettings = {
   targetRoi: 150,
   storageLocations: ['Box A1', 'Box A2', 'Box B1', 'Rail 1', 'Shelf 1'],
   monthlyProfitTarget: 5000,
+  automation: createDefaultAutomationSettings(),
   finance: {
     openingCash: 0,
     emergencyReserve: 0,
@@ -45,7 +48,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -132,6 +135,7 @@ export default function App() {
     review: 'CEO Review Centre',
     recommendations: 'CEO Recommendation Engine',
     forecasting: 'Business Forecasting Engine',
+    automation: 'Automation Centre',
     inventory: 'Inventory Command Centre',
     'inventory-intelligence': 'Inventory Intelligence Engine',
     'brand-performance': 'Brand Performance Centre',
@@ -151,7 +155,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.5.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.6.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -195,6 +199,7 @@ export default function App() {
           onOpenBrandPerformance={() => changeTab('brand-performance')}
           onOpenRecommendations={() => changeTab('recommendations')}
           onOpenForecasting={() => changeTab('forecasting')}
+          onOpenAutomation={() => changeTab('automation')}
         />
       )}
       {tab === 'recommendations' && (
@@ -224,6 +229,20 @@ export default function App() {
           onOpenInventory={() => openInventory()}
           onOpenPipeline={() => changeTab('pipeline')}
           onOpenRecommendations={() => changeTab('recommendations')}
+        />
+      )}
+      {tab === 'automation' && (
+        <AutomationCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onChangeAutomation={automation =>
+            setSettings(current => ({ ...current, automation }))
+          }
+          onOpenRecommendations={() => changeTab('recommendations')}
+          onOpenBackup={() => changeTab('backup')}
+          onOpenInventoryIntelligence={() => changeTab('inventory-intelligence')}
+          onOpenFinance={() => changeTab('finance')}
         />
       )}
       {tab === 'inventory' && (
@@ -377,6 +396,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('forecasting')}>
                 <span>↗</span><strong>Business Forecasting</strong><small>Cash, profit, reserves and target outlook</small>
+              </button>
+              <button type="button" onClick={() => changeTab('automation')}>
+                <span>⟳</span><strong>Automation Centre</strong><small>Recurring reviews, alerts and launch readiness</small>
               </button>
 
               <button type="button" onClick={() => changeTab('inventory-intelligence')}>
