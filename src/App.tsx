@@ -3,6 +3,9 @@ import './styles.css'
 import { Dashboard } from './components/Dashboard'
 import { Inventory } from './components/Inventory'
 import { BackupCenter } from './components/BackupCenter'
+import { AddItem } from './components/AddItem'
+import { SourceCheck } from './components/SourceCheck'
+import { Orders } from './components/Orders'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 
 const seed: InventoryItem[] = [
@@ -24,7 +27,7 @@ const defaultSettings: JosSettings = {
   storageLocations: ['Box A1', 'Box A2', 'Box B1', 'Rail 1', 'Shelf 1'],
 }
 
-type Tab = 'home' | 'inventory' | 'backup'
+type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -50,7 +53,18 @@ export default function App() {
     setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
   }
 
-  const restoreBackup = (restoredItems: InventoryItem[], restoredOrders: OrderRecord[], restoredSettings: JosSettings) => {
+  const addItem = (item: InventoryItem) => {
+    setItems(current => [...current, item])
+    setInventoryFilter(undefined)
+    setTab('inventory')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const restoreBackup = (
+    restoredItems: InventoryItem[],
+    restoredOrders: OrderRecord[],
+    restoredSettings: JosSettings,
+  ) => {
     setItems(restoredItems)
     setOrders(restoredOrders)
     setSettings(restoredSettings)
@@ -69,34 +83,72 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const title = tab === 'home' ? 'Mission Control' : tab === 'inventory' ? 'Inventory Command Centre' : 'Backup Centre'
+  const titles: Record<Tab, string> = {
+    home: 'Mission Control',
+    inventory: 'Inventory Command Centre',
+    add: 'Add Stock Item',
+    sourcecheck: 'SourceCheck',
+    orders: 'Orders',
+    backup: 'Backup Centre',
+  }
 
   return (
     <div className="app-shell">
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
-        <div>
-          <p className="eyebrow">JOS ONE · BUILD 02.2</p>
-          <h1>{title}</h1>
+        <div className="app-title">
+          <p className="eyebrow">JOS ONE · BUILD 02.2.7</p>
+          <h1>{titles[tab]}</h1>
           <p className="header-date">
-            {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            {new Date().toLocaleDateString('en-GB', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
           </p>
         </div>
+        <button
+          type="button"
+          className={`backup-shortcut ${tab === 'backup' ? 'active' : ''}`}
+          onClick={() => changeTab('backup')}
+          aria-label="Open Backup Centre"
+        >
+          ⇅
+        </button>
       </header>
 
       {tab === 'home' && <Dashboard items={items} onOpenInventory={openInventory} />}
-      {tab === 'inventory' && <Inventory items={items} onUpdate={updateItem} initialStatus={inventoryFilter} />}
-      {tab === 'backup' && <BackupCenter items={items} orders={orders} settings={settings} onRestore={restoreBackup} />}
+      {tab === 'inventory' && (
+        <Inventory items={items} onUpdate={updateItem} initialStatus={inventoryFilter} />
+      )}
+      {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
+      {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
+      {tab === 'orders' && <Orders orders={orders} />}
+      {tab === 'backup' && (
+        <BackupCenter
+          items={items}
+          orders={orders}
+          settings={settings}
+          onRestore={restoreBackup}
+        />
+      )}
 
-      <nav className="bottom-nav" aria-label="Main navigation">
+      <nav className="bottom-nav five-tabs" aria-label="Main navigation">
         <button type="button" className={tab === 'home' ? 'active' : ''} onClick={() => changeTab('home')}>
-          <span aria-hidden="true">⌂</span><small>Mission</small>
+          <span aria-hidden="true">⌂</span><small>Home</small>
         </button>
         <button type="button" className={tab === 'inventory' ? 'active' : ''} onClick={() => openInventory()}>
           <span aria-hidden="true">▤</span><small>Inventory</small>
         </button>
-        <button type="button" className={tab === 'backup' ? 'active' : ''} onClick={() => changeTab('backup')}>
-          <span aria-hidden="true">⇅</span><small>Backup</small>
+        <button type="button" className={tab === 'add' ? 'active' : ''} onClick={() => changeTab('add')}>
+          <span aria-hidden="true">＋</span><small>Add</small>
+        </button>
+        <button type="button" className={tab === 'sourcecheck' ? 'active' : ''} onClick={() => changeTab('sourcecheck')}>
+          <span aria-hidden="true">⌕</span><small>SourceCheck</small>
+        </button>
+        <button type="button" className={tab === 'orders' ? 'active' : ''} onClick={() => changeTab('orders')}>
+          <span aria-hidden="true">▣</span><small>Orders</small>
         </button>
       </nav>
     </div>
