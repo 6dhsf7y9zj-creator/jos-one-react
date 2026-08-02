@@ -9,6 +9,7 @@ import { Orders } from './components/Orders'
 import { FinanceCommandCentre } from './components/FinanceCommandCentre'
 import { BusinessIntelligence } from './components/BusinessIntelligence'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline'
+import { OperationsCommandCentre } from './components/OperationsCommandCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -38,7 +39,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -117,6 +118,7 @@ export default function App() {
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
     orders: 'Orders',
+    operations: 'Operations Command Centre',
     pipeline: 'Photography & Listing Pipeline',
     finance: 'Finance Command Centre',
     intelligence: 'Business Intelligence',
@@ -128,7 +130,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.7.1</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.8.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -140,6 +142,14 @@ export default function App() {
           </p>
         </div>
         <div className="header-shortcuts">
+          <button
+            type="button"
+            className={`operations-shortcut ${tab === 'operations' ? 'active' : ''}`}
+            onClick={() => changeTab('operations')}
+            aria-label="Open Operations Command Centre"
+          >
+            ✓
+          </button>
           <button
             type="button"
             className={`pipeline-shortcut ${tab === 'pipeline' ? 'active' : ''}`}
@@ -199,6 +209,18 @@ export default function App() {
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
       {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
       {tab === 'orders' && <Orders orders={orders} />}
+      {tab === 'operations' && (
+        <OperationsCommandCentre
+          items={items}
+          orders={orders}
+          onUpdate={updateItem}
+          onOpenInventory={openInventory}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenFinance={() => changeTab('finance')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+        />
+      )}
       {tab === 'pipeline' && (
         <PhotographyListingPipeline
           items={items}
