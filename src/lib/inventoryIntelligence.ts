@@ -417,12 +417,13 @@ export function calculateInventoryIntelligence(
         averageDaysToSell: evidence?.days.length
           ? evidence.days.reduce((sum, days) => sum + days, 0) / evidence.days.length
           : undefined,
-        evidence:
+        evidence: (
           (evidence?.realisedSales ?? 0) >= 5
             ? 'developing'
             : (evidence?.realisedSales ?? 0) > 0
               ? 'limited'
-              : 'forecast-only',
+              : 'forecast-only'
+        ) as InventoryBrandIntelligence['evidence'],
       }
     })
     .sort((a, b) =>
