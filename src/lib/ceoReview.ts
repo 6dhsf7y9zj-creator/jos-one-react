@@ -7,7 +7,7 @@ import type {
 } from '../types/inventory'
 import { calculateCeoDashboard } from './dashboard'
 import { calculateFinanceSummary, normaliseFinanceState } from './finance'
-import { buildOperationsOverview } from './operations'
+import { calculateOperations } from './operations'
 import { inferPipelineStage, pipelineBottleneck, pipelineReadiness } from './pipeline'
 import { buildBusinessIntelligence } from './intelligence'
 import { expectedProfit, itemRoi } from './inventory'
@@ -115,7 +115,7 @@ export function buildCeoReview(
   const finance = normaliseFinanceState(settings.finance)
   const ceo = calculateCeoDashboard(items, orders, new Date('2027-01-01T00:00:00'), now)
   const financeSummary = calculateFinanceSummary(finance, items, now)
-  const operations = buildOperationsOverview(items, orders, now)
+  const operations = calculateOperations(items, orders, now)
   const intelligence = buildBusinessIntelligence(items, finance, now)
   const active = items.filter(item => !['Sold', 'Dispatched', 'Archived'].includes(item.status))
   const weekTransactions = recentTransactions(finance, now)
@@ -291,7 +291,7 @@ export function buildCeoReview(
   const overall = clamp(
     ceo.businessHealth * .28 +
       financeScore * .20 +
-      operations.healthScore * .20 +
+      operations.score * .20 +
       pipelineScore * .15 +
       dispatchScore * .10 +
       dataScore * .07,
@@ -383,7 +383,7 @@ export function buildCeoReview(
     healthBreakdown: [
       { label: 'Inventory', score: ceo.businessHealth, detail: `${active.length} active items` },
       { label: 'Finance', score: financeScore, detail: `Cash £${financeSummary.cashBalance.toFixed(2)}` },
-      { label: 'Operations', score: operations.healthScore, detail: `${operations.totalOutstanding} tasks waiting` },
+      { label: 'Operations', score: operations.score, detail: `${operations.ordersWaiting + operations.pipelineWaiting} tasks waiting` },
       { label: 'Pipeline', score: pipelineScore, detail: `${bottleneck.stage} bottleneck` },
       { label: 'Dispatch', score: dispatchScore, detail: `${stages.dispatchWaiting} waiting` },
       { label: 'Data quality', score: Math.round((dataScore + intelligenceScore) / 2), detail: `${missingStorage + missingMeasurements} gaps` },

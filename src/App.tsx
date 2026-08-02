@@ -133,7 +133,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 1.0.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 1.0.1</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
