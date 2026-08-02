@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './styles.css'
 import { Dashboard } from './components/Dashboard'
 import { Inventory } from './components/Inventory'
-import type { InventoryItem } from './types/inventory'
+import type { InventoryItem, StockStatus } from './types/inventory'
 
 const seed: InventoryItem[] = [
   {
@@ -33,9 +33,11 @@ const seed: InventoryItem[] = [
   },
 ]
 
-export default function App() {
-  const [tab, setTab] = useState<'home' | 'inventory'>('home')
+type Tab = 'home' | 'inventory'
 
+export default function App() {
+  const [tab, setTab] = useState<Tab>('home')
+  const [inventoryFilter, setInventoryFilter] = useState<StockStatus | undefined>()
   const [items, setItems] = useState<InventoryItem[]>(() => {
     try {
       const saved = localStorage.getItem('jos-one-react-items')
@@ -50,9 +52,19 @@ export default function App() {
   }, [items])
 
   const updateItem = (updated: InventoryItem) => {
-    setItems(current =>
-      current.map(item => (item.sku === updated.sku ? updated : item)),
-    )
+    setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
+  }
+
+  const openInventory = (status?: StockStatus) => {
+    setInventoryFilter(status)
+    setTab('inventory')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const openHome = () => {
+    setInventoryFilter(undefined)
+    setTab('home')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -62,38 +74,46 @@ export default function App() {
           src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`}
           alt="The JAE Edit"
         />
-
         <div>
-          <p>JOS ONE</p>
-          <h1>
-            {tab === 'home'
-              ? 'CEO Dashboard'
-              : 'Inventory Command Centre'}
-          </h1>
+          <p className="eyebrow">JOS ONE · BUILD 02.1</p>
+          <h1>{tab === 'home' ? 'Mission Control' : 'Inventory Command Centre'}</h1>
+          <p className="header-date">
+            {new Date().toLocaleDateString('en-GB', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </p>
         </div>
       </header>
 
       {tab === 'home' ? (
-        <Dashboard items={items} />
+        <Dashboard items={items} onOpenInventory={openInventory} />
       ) : (
-        <Inventory items={items} onUpdate={updateItem} />
+        <Inventory
+          items={items}
+          onUpdate={updateItem}
+          initialStatus={inventoryFilter}
+        />
       )}
 
       <nav className="bottom-nav" aria-label="Main navigation">
         <button
           type="button"
           className={tab === 'home' ? 'active' : ''}
-          onClick={() => setTab('home')}
+          onClick={openHome}
         >
-          Dashboard
+          <span aria-hidden="true">⌂</span>
+          <small>Mission</small>
         </button>
-
         <button
           type="button"
           className={tab === 'inventory' ? 'active' : ''}
-          onClick={() => setTab('inventory')}
+          onClick={() => openInventory()}
         >
-          Inventory
+          <span aria-hidden="true">▤</span>
+          <small>Inventory</small>
         </button>
       </nav>
     </div>
