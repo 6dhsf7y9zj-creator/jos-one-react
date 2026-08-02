@@ -20,3 +20,38 @@ export function generateSku(existing: InventoryItem[]): string {
 }
 
 export const createSku = generateSku;
+
+
+export function itemRoi(item: InventoryItem): number {
+  if (item.purchasePrice <= 0) return 0;
+  return Number(((expectedProfit(item) / item.purchasePrice) * 100).toFixed(1));
+}
+
+export function duplicateSkus(items: InventoryItem[]): string[] {
+  const counts = new Map<string, number>();
+  items.forEach(item => counts.set(item.sku, (counts.get(item.sku) ?? 0) + 1));
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([sku]) => sku);
+}
+
+export function normaliseInventoryText(item: InventoryItem): string {
+  return [
+    item.sku,
+    item.brand,
+    item.category,
+    item.description,
+    item.department,
+    item.size,
+    item.condition,
+    item.status,
+    item.grade,
+    item.storageLocation,
+    item.colour,
+    item.notes,
+    item.platform,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}

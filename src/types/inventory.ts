@@ -22,6 +22,12 @@ export interface InventoryItem {
   action?: string;
   listingStage?: string;
   platform?: string;
+  colour?: string;
+  notes?: string;
+  actualSalePrice?: number;
+  dateSourced?: string;
+  dateListed?: string;
+  dateSold?: string;
 }
 
 export interface OrderRecord {

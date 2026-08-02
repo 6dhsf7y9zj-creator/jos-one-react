@@ -62,6 +62,15 @@ export default function App() {
     setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
   }
 
+  const updateManyItems = (updatedItems: InventoryItem[]) => {
+    const updates = new Map(updatedItems.map(item => [item.sku, item]))
+    setItems(current => current.map(item => updates.get(item.sku) ?? item))
+  }
+
+  const deleteItem = (sku: string) => {
+    setItems(current => current.filter(item => item.sku !== sku))
+  }
+
   const addItem = (item: InventoryItem) => {
     setItems(current => [...current, item])
     setInventoryFilter(undefined)
@@ -106,7 +115,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.2.4</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.3.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -129,7 +138,13 @@ export default function App() {
 
       {tab === 'home' && <Dashboard items={items} onOpenInventory={openInventory} />}
       {tab === 'inventory' && (
-        <Inventory items={items} onUpdate={updateItem} initialStatus={inventoryFilter} />
+        <Inventory
+          items={items}
+          onUpdate={updateItem}
+          onUpdateMany={updateManyItems}
+          onDelete={deleteItem}
+          initialStatus={inventoryFilter}
+        />
       )}
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
       {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
