@@ -3,6 +3,7 @@ import { calculateCeoDashboard, formatCeoMoney, type CeoMission } from '../lib/d
 import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
 import { calculateExecutiveKpis } from '../lib/executiveKpis'
 import { formatFinanceMoney } from '../lib/finance'
+import { calculateBrandPerformance } from '../lib/brandPerformance'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -13,6 +14,7 @@ type DashboardProps = {
   onOpenAdd: () => void
   onOpenSourceCheck: () => void
   onOpenFinance: () => void
+  onOpenBrandPerformance: () => void
 }
 
 function greeting(): string {
@@ -41,11 +43,20 @@ export function Dashboard({
   onOpenAdd,
   onOpenSourceCheck,
   onOpenFinance,
+  onOpenBrandPerformance,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
   const firstMission = metrics.missions[0]
-  const topBrands = metrics.brands.slice(0, 4)
+  const brandPerformance = calculateBrandPerformance(
+    items,
+    settings.finance,
+    {
+      targetRoi: settings.targetRoi,
+      minimumProfit: settings.minimumProfit,
+    },
+  )
+  const topBrands = brandPerformance.brands.slice(0, 4)
   const workflow = [
     { label: 'Prep', count: metrics.prepItems, status: 'Prep' as StockStatus },
     { label: 'Photographed', count: metrics.photographedItems, status: 'Photographed' as StockStatus },
@@ -231,28 +242,39 @@ export function Dashboard({
       </section>
 
       <section className="panel ceo-brands-panel">
-        <SectionHeader eyebrow="BRAND FORECAST" title="Where expected profit currently sits" compact />
+        <SectionHeader
+          eyebrow="BRAND PERFORMANCE ENGINE"
+          title="Returns, speed and cash movement by brand"
+          compact
+          action={<JosButton variant="ghost" onClick={onOpenBrandPerformance}>Open brands</JosButton>}
+        />
 
         {topBrands.length === 0 ? (
-          <p className="ceo-empty">No active inventory is available for brand analysis.</p>
+          <p className="ceo-empty">No inventory is available for brand analysis.</p>
         ) : (
           <div className="brand-ranking">
             {topBrands.map((brand, index) => (
-              <button type="button" key={brand.brand} onClick={() => onOpenInventory()}>
+              <button type="button" key={brand.brand} onClick={onOpenBrandPerformance}>
                 <span className="brand-rank">{index + 1}</span>
                 <span className="brand-name">
                   <strong>{brand.brand}</strong>
-                  <small>{brand.itemCount} items · {brand.averageRoi.toFixed(0)}% average ROI</small>
+                  <small>
+                    {brand.recommendation} · {brand.completedSales} linked sales · {brand.evidence.replace('-', ' ')}
+                  </small>
                 </span>
-                <span className="brand-profit">{formatCeoMoney(brand.expectedProfit)}</span>
+                <span className="brand-profit">
+                  {brand.completedSales > 0
+                    ? formatFinanceMoney(brand.realisedProfit)
+                    : formatFinanceMoney(brand.forecastProfit)}
+                </span>
               </button>
             ))}
           </div>
         )}
 
         <p className="ceo-data-truth">
-          This is a forecast from current stock, not proven brand performance. True performance
-          needs completed sales and sale dates.
+          Forecast-only brands remain Hold. Buy More requires linked sales that support returns,
+          selling speed and cash-efficiency targets.
         </p>
       </section>
 
