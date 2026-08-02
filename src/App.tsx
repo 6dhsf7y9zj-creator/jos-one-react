@@ -119,7 +119,7 @@ export default function App() {
     inventory: 'Inventory Command Centre',
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
-    orders: 'Orders',
+    orders: 'Customer & Orders Command Centre',
     operations: 'Operations Command Centre',
     pipeline: 'Photography & Listing Pipeline',
     finance: 'Finance Command Centre',
@@ -133,7 +133,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 1.0.3</p>
+            <p className="eyebrow">JOS ONE · VERSION 1.1.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -253,7 +253,14 @@ export default function App() {
       )}
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
       {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
-      {tab === 'orders' && <Orders orders={orders} />}
+      {tab === 'orders' && (
+        <Orders
+          orders={orders}
+          items={items}
+          onChange={setOrders}
+          onUpdateItem={updateItem}
+        />
+      )}
       {tab === 'operations' && (
         <OperationsCommandCentre
           items={items}

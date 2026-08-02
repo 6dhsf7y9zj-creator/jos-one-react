@@ -63,13 +63,39 @@ export interface InventoryItem {
   listingReadyAt?: string;
 }
 
+export type OrderStatus =
+  | 'Paid'
+  | 'Ready to pack'
+  | 'Packed'
+  | 'Dispatched'
+  | 'Delivered'
+  | 'Return requested'
+  | 'Returned'
+  | 'Refunded'
+  | 'Cancelled';
+
 export interface OrderRecord {
   id: string;
   sku: string;
   item: string;
   status: string;
   deadline: string;
+  buyerName?: string;
+  buyerUsername?: string;
+  platform?: string;
+  salePrice?: number;
+  postageIncome?: number;
+  trackingNumber?: string;
+  carrier?: string;
+  placedAt?: string;
+  packedAt?: string;
+  dispatchedAt?: string;
+  deliveredAt?: string;
+  returnReason?: string;
+  refundAmount?: number;
+  notes?: string;
 }
+
 
 export type FinanceTransactionType =
   | 'sale'

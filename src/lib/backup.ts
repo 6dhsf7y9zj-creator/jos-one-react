@@ -176,8 +176,22 @@ export function migrateBackup(input: unknown): JosBackup {
           id: textValue(record.id),
           sku: textValue(record.sku),
           item: textValue(record.item),
-          status: textValue(record.status),
+          status: textValue(record.status, 'Paid'),
           deadline: textValue(record.deadline),
+          buyerName: textValue(record.buyerName) || undefined,
+          buyerUsername: textValue(record.buyerUsername) || undefined,
+          platform: textValue(record.platform) || undefined,
+          salePrice: record.salePrice === undefined ? undefined : numberValue(record.salePrice),
+          postageIncome: record.postageIncome === undefined ? undefined : numberValue(record.postageIncome),
+          trackingNumber: textValue(record.trackingNumber) || undefined,
+          carrier: textValue(record.carrier) || undefined,
+          placedAt: textValue(record.placedAt) || undefined,
+          packedAt: textValue(record.packedAt) || undefined,
+          dispatchedAt: textValue(record.dispatchedAt) || undefined,
+          deliveredAt: textValue(record.deliveredAt) || undefined,
+          returnReason: textValue(record.returnReason) || undefined,
+          refundAmount: record.refundAmount === undefined ? undefined : numberValue(record.refundAmount),
+          notes: textValue(record.notes) || undefined,
         }
       })
     : []
@@ -205,7 +219,7 @@ export function migrateBackup(input: unknown): JosBackup {
 
 export function createBackup(items: InventoryItem[], orders: OrderRecord[], settings: JosSettings): JosBackup {
   return {
-    version: '2.7.0',
+    version: '3.1.0',
     exportedAt: new Date().toISOString(),
     items,
     orders,
