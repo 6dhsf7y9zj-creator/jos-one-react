@@ -313,3 +313,26 @@ h1, h2, h3 {
   .quick-actions > div { grid-template-columns: 1fr; }
   .inventory-tools { top: calc(91px + env(safe-area-inset-top)); }
 }
+
+/* Build 02.2 — Backup & Restore */
+.backup-screen { display: grid; gap: 16px; }
+.backup-hero p:not(.eyebrow), .backup-card > p:not(.eyebrow) { color: #806d5f; line-height: 1.55; }
+.backup-card h2, .backup-hero h2 { font-size: 1.65rem; }
+.primary-action, .danger-action {
+  width: 100%; border: 0; border-radius: 17px; padding: 15px 16px; min-height: 54px;
+  font-weight: 850; font-size: 1rem;
+}
+.primary-action { background: #573622; color: white; }
+.danger-action { background: #a04f3d; color: white; margin-top: 14px; }
+.restore-message { margin-top: 14px; padding: 13px 14px; border-radius: 14px; background: #f4e3dc; color: #7a3326; font-weight: 750; }
+.restore-message.ready { background: #e2f0e5; color: #2c643c; }
+.restore-preview { margin-top: 14px; padding: 16px; border: 1px solid #dec9a9; border-radius: 18px; background: #fffaf2; }
+.restore-preview > div { display: flex; justify-content: space-between; border-bottom: 1px solid #eadcc7; padding: 10px 0; }
+.restore-preview > div:last-of-type { border-bottom: 0; }
+.restore-preview span, .restore-preview p { color: #806d5f; }
+.restore-preview p { font-size: .85rem; line-height: 1.45; margin-bottom: 0; }
+.backup-summary { margin: 16px 0; }
+.backup-summary > div { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #eadcc7; }
+.backup-summary dt { color: #806d5f; }
+.backup-summary dd { margin: 0; font-weight: 850; }
+.bottom-nav { grid-template-columns: repeat(3, 1fr); }
