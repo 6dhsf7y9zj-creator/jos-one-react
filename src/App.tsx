@@ -11,6 +11,7 @@ import { BusinessIntelligence } from './components/BusinessIntelligence'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline'
 import { OperationsCommandCentre } from './components/OperationsCommandCentre'
 import { CeoReviewCentre } from './components/CeoReviewCentre'
+import { InventoryIntelligenceEngine } from './components/InventoryIntelligenceEngine'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -40,7 +41,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'inventory' | 'inventory-intelligence' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -126,6 +127,7 @@ export default function App() {
     home: 'Mission Control',
     review: 'CEO Review Centre',
     inventory: 'Inventory Command Centre',
+    'inventory-intelligence': 'Inventory Intelligence Engine',
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
     orders: 'Customer & Orders Command Centre',
@@ -142,7 +144,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.1.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.2.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -191,6 +193,17 @@ export default function App() {
           onUpdateMany={updateManyItems}
           onDelete={deleteItem}
           initialStatus={inventoryFilter}
+        />
+      )}
+      {tab === 'inventory-intelligence' && (
+        <InventoryIntelligenceEngine
+          items={items}
+          finance={settings.finance}
+          onUpdateMany={updateManyItems}
+          onOpenInventory={openInventory}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenFinance={() => changeTab('finance')}
         />
       )}
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
@@ -304,6 +317,9 @@ export default function App() {
             <div className="jos-module-grid">
               <button type="button" onClick={() => changeTab('review')}>
                 <span>◎</span><strong>CEO Review</strong><small>Executive briefing and priorities</small>
+              </button>
+              <button type="button" onClick={() => changeTab('inventory-intelligence')}>
+                <span>◆</span><strong>Inventory Intelligence</strong><small>Stock health, grading and cash lock</small>
               </button>
               <button type="button" onClick={() => changeTab('orders')}>
                 <span>▣</span><strong>Customers & Orders</strong><small>Sales, buyers and dispatch</small>
