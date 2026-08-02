@@ -7,6 +7,7 @@ import { AddItem } from './components/AddItem'
 import { SourceCheck } from './components/SourceCheck'
 import { Orders } from './components/Orders'
 import { FinanceCommandCentre } from './components/FinanceCommandCentre'
+import { BusinessIntelligence } from './components/BusinessIntelligence'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -36,7 +37,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'finance' | 'backup'
+type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -116,6 +117,7 @@ export default function App() {
     sourcecheck: 'SourceCheck',
     orders: 'Orders',
     finance: 'Finance Command Centre',
+    intelligence: 'Business Intelligence',
     backup: 'Backup Centre',
   }
 
@@ -124,7 +126,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.5.0</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.6.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -136,6 +138,14 @@ export default function App() {
           </p>
         </div>
         <div className="header-shortcuts">
+          <button
+            type="button"
+            className={`intelligence-shortcut ${tab === 'intelligence' ? 'active' : ''}`}
+            onClick={() => changeTab('intelligence')}
+            aria-label="Open Business Intelligence"
+          >
+            ◈
+          </button>
           <button
             type="button"
             className={`finance-shortcut ${tab === 'finance' ? 'active' : ''}`}
@@ -184,6 +194,16 @@ export default function App() {
           items={items}
           finance={settings.finance}
           onChange={finance => setSettings(current => ({ ...current, finance }))}
+        />
+      )}
+      {tab === 'intelligence' && (
+        <BusinessIntelligence
+          items={items}
+          finance={settings.finance}
+          onOpenInventory={openInventory}
+          onOpenFinance={() => changeTab('finance')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+          onOpenOrders={() => changeTab('orders')}
         />
       )}
       {tab === 'backup' && (
