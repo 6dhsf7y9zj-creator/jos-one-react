@@ -6,6 +6,7 @@ import type {
 } from '../types/inventory'
 import { buildCeoReview, type ReviewPriority } from '../lib/ceoReview'
 import { formatFinanceMoney } from '../lib/finance'
+import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui'
 
 type Props = {
   items: InventoryItem[]
@@ -66,45 +67,58 @@ export function CeoReviewCentre(props: Props) {
         </div>
       </section>
 
-      <section className="review-kpis">
-        <button type="button" onClick={props.onOpenFinance}>
-          <span>Recorded business cash</span>
-          <strong>{formatFinanceMoney(review.cashBalance)}</strong>
-          <small>From Finance ledger</small>
-        </button>
-        <button type="button" onClick={props.onOpenFinance}>
-          <span>Available sourcing budget</span>
-          <strong>{formatFinanceMoney(review.availableSourcingBudget)}</strong>
-          <small>After recorded reserves</small>
-        </button>
-        <button type="button" onClick={() => props.onOpenInventory()}>
-          <span>Cash tied in stock</span>
-          <strong>{formatFinanceMoney(review.inventoryCost)}</strong>
-          <small>Active inventory cost</small>
-        </button>
-        <button type="button" onClick={() => props.onOpenInventory()}>
-          <span>Forecast sales</span>
-          <strong>{formatFinanceMoney(review.expectedSales)}</strong>
-          <small>Not realised revenue</small>
-        </button>
-        <button type="button" onClick={() => props.onOpenInventory()}>
-          <span>Forecast stock profit</span>
-          <strong>{formatFinanceMoney(review.expectedProfit)}</strong>
-          <small>Before tax and unknown costs</small>
-        </button>
-        <button type="button" onClick={props.onOpenFinance}>
-          <span>Realised operating profit</span>
-          <strong>{formatFinanceMoney(review.realisedProfit)}</strong>
-          <small>From recorded ledger</small>
-        </button>
+      <section className="jos-kpi-grid review-kpi-grid" aria-label="CEO review summary">
+        <KpiCard
+          label="Recorded business cash"
+          value={formatFinanceMoney(review.cashBalance)}
+          detail="From Finance ledger"
+          tone={review.cashBalance >= 0 ? 'positive' : 'urgent'}
+          onClick={props.onOpenFinance}
+        />
+        <KpiCard
+          label="Available sourcing budget"
+          value={formatFinanceMoney(review.availableSourcingBudget)}
+          detail="After recorded reserves"
+          tone={review.availableSourcingBudget > 0 ? 'positive' : 'warning'}
+          onClick={props.onOpenFinance}
+        />
+        <KpiCard
+          label="Cash tied in stock"
+          value={formatFinanceMoney(review.inventoryCost)}
+          detail="Active inventory cost"
+          tone="information"
+          onClick={() => props.onOpenInventory()}
+        />
+        <KpiCard
+          label="Forecast sales"
+          value={formatFinanceMoney(review.expectedSales)}
+          detail="Not realised revenue"
+          tone="information"
+          onClick={() => props.onOpenInventory()}
+        />
+        <KpiCard
+          label="Forecast stock profit"
+          value={formatFinanceMoney(review.expectedProfit)}
+          detail="Before tax and unknown costs"
+          tone="positive"
+          onClick={() => props.onOpenInventory()}
+        />
+        <KpiCard
+          label="Realised operating profit"
+          value={formatFinanceMoney(review.realisedProfit)}
+          detail="From recorded ledger"
+          tone={review.realisedProfit >= 0 ? 'positive' : 'urgent'}
+          onClick={props.onOpenFinance}
+        />
       </section>
 
       <section className="review-recommendation">
         <p className="eyebrow light">TODAY&apos;S RECOMMENDATION</p>
         <h2>{review.recommendation.title}</h2>
         <p>{review.recommendation.explanation}</p>
-        <button
-          type="button"
+        <JosButton
+          variant="primary"
+          fullWidth
           onClick={priorityAction({
             id: 'recommendation',
             title: review.recommendation.title,
@@ -114,19 +128,17 @@ export function CeoReviewCentre(props: Props) {
           }, props)}
         >
           Open recommended module
-        </button>
+        </JosButton>
       </section>
 
       <section className="panel review-priorities">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">TODAY&apos;S PRIORITIES</p>
-            <h2>Highest-impact work first</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="TODAY'S PRIORITIES" title="Highest-impact work first" compact />
 
         {review.priorities.length === 0 ? (
-          <p className="review-empty">No immediate operational priority is visible.</p>
+          <EmptyState
+            title="No immediate operational priority"
+            description="Current records do not show urgent dispatch, pipeline or stock work."
+          />
         ) : (
           <div className="review-priority-list">
             {review.priorities.map((priority, index) => (
@@ -149,12 +161,7 @@ export function CeoReviewCentre(props: Props) {
       </section>
 
       <section className="panel review-health-panel">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">HEALTH BREAKDOWN</p>
-            <h2>Why the score looks this way</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="HEALTH BREAKDOWN" title="Why the score looks this way" compact />
         <div className="review-health-grid">
           {review.healthBreakdown.map(section => (
             <div key={section.label}>
@@ -168,12 +175,7 @@ export function CeoReviewCentre(props: Props) {
       </section>
 
       <section className="panel review-workflow">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">WORKFLOW POSITION</p>
-            <h2>Where the business is waiting</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="WORKFLOW POSITION" title="Where the business is waiting" compact />
         <div className="review-workflow-grid">
           <button type="button" onClick={props.onOpenPipeline}><span>Preparation</span><strong>{review.workflow.prep}</strong></button>
           <button type="button" onClick={props.onOpenPipeline}><span>Photography</span><strong>{review.workflow.photography}</strong></button>
@@ -185,12 +187,7 @@ export function CeoReviewCentre(props: Props) {
       </section>
 
       <section className="panel review-performance">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">WEEKLY RECORDED PERFORMANCE</p>
-            <h2>Finance activity this week</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="WEEKLY RECORDED PERFORMANCE" title="Finance activity this week" compact />
         <div className="review-week-grid">
           <div><span>Sales recorded</span><strong>{formatFinanceMoney(review.weeklySales)}</strong></div>
           <div><span>Expenses recorded</span><strong>{formatFinanceMoney(review.weeklyExpenses)}</strong></div>
@@ -204,7 +201,7 @@ export function CeoReviewCentre(props: Props) {
             <p className="eyebrow">BRAND EVIDENCE</p>
             <h2>Forecast and realised results</h2>
           </div>
-          <button type="button" className="text-button" onClick={props.onOpenIntelligence}>Open intelligence</button>
+          <JosButton variant="ghost" onClick={props.onOpenIntelligence}>Open intelligence</JosButton>
         </div>
 
         <div className="review-brand-grid">
@@ -230,12 +227,7 @@ export function CeoReviewCentre(props: Props) {
       </section>
 
       <section className="panel review-checklist">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">CEO CHECKLIST</p>
-            <h2>Daily control points</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="CEO CHECKLIST" title="Daily control points" compact />
         <div className="review-checklist-list">
           {review.checklist.map(item => (
             <div className={item.complete ? 'complete' : ''} key={item.id}>
@@ -255,7 +247,7 @@ export function CeoReviewCentre(props: Props) {
             <p className="eyebrow">DATA PROTECTION</p>
             <h2>Backup position</h2>
           </div>
-          <button type="button" className="text-button" onClick={props.onOpenBackup}>Open backup</button>
+          <JosButton variant="ghost" onClick={props.onOpenBackup}>Open backup</JosButton>
         </div>
         <div className="review-backup-grid">
           <div><span>Latest snapshot</span><strong>{ageText(review.backup.ageHours)}</strong></div>

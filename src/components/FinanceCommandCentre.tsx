@@ -13,6 +13,7 @@ import {
   formatFinanceMoney,
   normaliseFinanceState,
 } from '../lib/finance'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
 
 type FinanceProps = {
   items: InventoryItem[]
@@ -173,48 +174,45 @@ export function FinanceCommandCentre({ items, finance, onChange }: FinanceProps)
       </section>
 
       {message && (
-        <button type="button" className="finance-message" onClick={() => setMessage('')}>
-          {message}<span>×</span>
-        </button>
+        <NoticeCard title={message} tone="positive" onDismiss={() => setMessage('')} />
       )}
 
-      <section className="finance-kpis">
-        <div>
-          <span>Safe cash after emergency reserve</span>
-          <strong>{formatFinanceMoney(summary.safeCashAfterEmergencyReserve)}</strong>
-          <small>Emergency reserve: {formatFinanceMoney(state.emergencyReserve)}</small>
-        </div>
-        <div>
-          <span>Available sourcing budget</span>
-          <strong>{formatFinanceMoney(summary.availableSourcingBudget)}</strong>
-          <small>Limited by your planned budget</small>
-        </div>
-        <div>
-          <span>Cash tied in active stock</span>
-          <strong>{formatFinanceMoney(summary.inventoryCost)}</strong>
-          <small>{items.filter(item => !['Dispatched', 'Archived'].includes(item.status)).length} active items</small>
-        </div>
-        <div>
-          <span>Tax reserve balance</span>
-          <strong>{formatFinanceMoney(summary.taxReserveBalance)}</strong>
-          <small>Planning reserve—not an HMRC calculation</small>
-        </div>
+      <section className="jos-kpi-grid" aria-label="Finance summary">
+        <KpiCard
+          label="Safe cash after emergency reserve"
+          value={formatFinanceMoney(summary.safeCashAfterEmergencyReserve)}
+          detail={`Emergency reserve: ${formatFinanceMoney(state.emergencyReserve)}`}
+          tone={summary.safeCashAfterEmergencyReserve >= 0 ? 'positive' : 'urgent'}
+        />
+        <KpiCard
+          label="Available sourcing budget"
+          value={formatFinanceMoney(summary.availableSourcingBudget)}
+          detail="Limited by your planned budget"
+          tone={summary.availableSourcingBudget > 0 ? 'positive' : 'warning'}
+        />
+        <KpiCard
+          label="Cash tied in active stock"
+          value={formatFinanceMoney(summary.inventoryCost)}
+          detail={`${items.filter(item => !['Dispatched', 'Archived'].includes(item.status)).length} active items`}
+          tone="information"
+        />
+        <KpiCard
+          label="Tax reserve balance"
+          value={formatFinanceMoney(summary.taxReserveBalance)}
+          detail="Planning reserve—not an HMRC calculation"
+          tone={summary.additionalTaxReserveNeeded > 0 ? 'warning' : 'positive'}
+        />
       </section>
 
       <section className="finance-actions">
-        <button type="button" className="primary-action" onClick={() => setFormOpen(true)}>Add transaction</button>
-        <button type="button" className="secondary-action" onClick={() => setSettingsOpen(value => !value)}>Finance settings</button>
-        <button type="button" className="secondary-action" onClick={() => downloadLedger(state.transactions)}>Export ledger CSV</button>
+        <JosButton variant="primary" onClick={() => setFormOpen(true)}>Add transaction</JosButton>
+        <JosButton variant="secondary" onClick={() => setSettingsOpen(value => !value)}>Finance settings</JosButton>
+        <JosButton variant="secondary" onClick={() => downloadLedger(state.transactions)}>Export ledger CSV</JosButton>
       </section>
 
       {settingsOpen && (
         <section className="panel finance-settings">
-          <div className="section-heading compact">
-            <div>
-              <p className="eyebrow">PLANNING SETTINGS</p>
-              <h2>Cash and reserve rules</h2>
-            </div>
-          </div>
+          <SectionHeader eyebrow="PLANNING SETTINGS" title="Cash and reserve rules" compact />
           <div className="finance-settings-grid">
             <label>Opening business cash (£)
               <input
@@ -431,8 +429,8 @@ export function FinanceCommandCentre({ items, finance, onChange }: FinanceProps)
               </label>
             </div>
 
-            <button type="submit" className="primary-action">Save transaction</button>
-            <button type="button" className="secondary-action" onClick={() => setFormOpen(false)}>Cancel</button>
+            <JosButton type="submit" variant="primary" fullWidth>Save transaction</JosButton>
+            <JosButton type="button" variant="secondary" fullWidth onClick={() => setFormOpen(false)}>Cancel</JosButton>
           </form>
         </section>
       )}

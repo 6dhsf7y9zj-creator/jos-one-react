@@ -3535,3 +3535,62 @@ button.jos-kpi-card { width: 100%; }
 @media (min-width: 700px) {
   .jos-kpi-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+
+/* ==========================================================
+   JOS One v2.1.0 — Design System Rollout
+   Finance, Operations and CEO Review
+   ========================================================== */
+
+.finance-command-centre,
+.operations-command-centre,
+.ceo-review-centre {
+  gap: var(--jos-space-4);
+}
+
+.finance-actions .jos-button {
+  flex: 1 1 150px;
+}
+
+.operations-bottleneck-panel .jos-section-header,
+.review-brands .jos-section-header,
+.review-backup .jos-section-header {
+  align-items: center;
+}
+
+.review-kpi-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.review-recommendation .jos-button {
+  margin-top: var(--jos-space-3);
+  border-color: #bd8e3c;
+  background: #bd8e3c;
+}
+
+.operations-mission-card .jos-empty-state {
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.08);
+  color: white;
+}
+
+.operations-mission-card .jos-empty-state p {
+  color: #eadfd6;
+}
+
+.operations-mission-card .jos-empty-icon {
+  background: rgba(255,255,255,.13);
+  color: white;
+}
+
+.operations-mission-card .jos-button-secondary {
+  border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.11);
+  color: white;
+}
+
+@media (min-width: 700px) {
+  .review-kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

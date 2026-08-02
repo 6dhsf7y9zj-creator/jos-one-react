@@ -1,6 +1,7 @@
 import type { InventoryItem, OrderRecord, StockStatus } from '../types/inventory'
 import { advancePipeline } from '../lib/pipeline'
 import { calculateOperations, type OperationsDestination, type OperationsTask } from '../lib/operations'
+import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui'
 
 type Props = {
   items: InventoryItem[]
@@ -74,11 +75,31 @@ export function OperationsCommandCentre({
         </div>
       </section>
 
-      <section className="operations-kpis">
-        <button type="button" onClick={onOpenOrders}><span>Dispatch waiting</span><strong>{operations.ordersWaiting}</strong></button>
-        <button type="button" onClick={onOpenPipeline}><span>Pipeline waiting</span><strong>{operations.pipelineWaiting}</strong></button>
-        <button type="button" onClick={onOpenPipeline}><span>Ready to upload</span><strong>{operations.readyToUpload}</strong></button>
-        <button type="button" onClick={() => onOpenInventory('Live')}><span>Slow live stock</span><strong>{operations.slowStock}</strong></button>
+      <section className="jos-kpi-grid" aria-label="Operations position">
+        <KpiCard
+          label="Dispatch waiting"
+          value={operations.ordersWaiting}
+          tone={operations.ordersWaiting > 0 ? 'urgent' : 'positive'}
+          onClick={onOpenOrders}
+        />
+        <KpiCard
+          label="Pipeline waiting"
+          value={operations.pipelineWaiting}
+          tone={operations.pipelineWaiting > 0 ? 'warning' : 'positive'}
+          onClick={onOpenPipeline}
+        />
+        <KpiCard
+          label="Ready to upload"
+          value={operations.readyToUpload}
+          tone={operations.readyToUpload > 0 ? 'positive' : 'neutral'}
+          onClick={onOpenPipeline}
+        />
+        <KpiCard
+          label="Slow live stock"
+          value={operations.slowStock}
+          tone={operations.slowStock > 0 ? 'warning' : 'positive'}
+          onClick={() => onOpenInventory('Live')}
+        />
       </section>
 
       <section className="operations-mission-card">
@@ -91,10 +112,15 @@ export function OperationsCommandCentre({
         </div>
 
         {operations.tasks.length === 0 ? (
-          <div className="operations-clear-state">
-            <h3>No immediate operational backlog</h3>
-            <p>Use SourceCheck before buying more stock, or review Finance before setting the next sourcing budget.</p>
-          </div>
+          <EmptyState
+            title="No immediate operational backlog"
+            description="Use SourceCheck before buying more stock, or review Finance before setting the next sourcing budget."
+            action={
+              <JosButton variant="secondary" onClick={onOpenSourceCheck}>
+                Run SourceCheck
+              </JosButton>
+            }
+          />
         ) : (
           <div className="operations-task-list">
             {operations.tasks.map((task, index) => (
@@ -119,16 +145,18 @@ export function OperationsCommandCentre({
       </section>
 
       <section className="panel operations-bottleneck-panel">
-        <div className="section-heading compact">
-          <div><p className="eyebrow">BOTTLENECK DETECTOR</p><h2>{operations.bottleneck.label}</h2></div>
-          <strong className="bottleneck-count">{operations.bottleneck.count}</strong>
-        </div>
+        <SectionHeader
+          eyebrow="BOTTLENECK DETECTOR"
+          title={operations.bottleneck.label}
+          compact
+          action={<strong className="bottleneck-count">{operations.bottleneck.count}</strong>}
+        />
         <p>{operations.bottleneck.count === 0 ? 'No active workflow bottleneck is visible.' : `${operations.bottleneck.count} items are waiting here. At the standard target, clearing this stage needs about ${operations.bottleneck.count * operations.bottleneck.targetMinutes} minutes.`}</p>
-        <button type="button" onClick={onOpenPipeline}>Open pipeline</button>
+        <JosButton variant="secondary" onClick={onOpenPipeline}>Open pipeline</JosButton>
       </section>
 
       <section className="panel operations-timeline-panel">
-        <div className="section-heading compact"><div><p className="eyebrow">OPERATIONS TIMELINE</p><h2>Where stock is sitting</h2></div></div>
+        <SectionHeader eyebrow="OPERATIONS TIMELINE" title="Where stock is sitting" compact />
         <div className="operations-timeline">
           {operations.stages.map((stage, index) => (
             <button type="button" key={stage.label} onClick={onOpenPipeline}>
@@ -141,7 +169,7 @@ export function OperationsCommandCentre({
       </section>
 
       <section className="panel operations-profit-panel">
-        <div className="section-heading compact"><div><p className="eyebrow">HIGHEST-PROFIT WORK</p><h2>Money closest to being unlocked</h2></div></div>
+        <SectionHeader eyebrow="HIGHEST-PROFIT WORK" title="Money closest to being unlocked" compact />
         {highestProfitTasks.length === 0 ? <p className="operations-empty">No item-level profit tasks are currently available.</p> : (
           <div className="operations-profit-list">
             {highestProfitTasks.map(task => (
@@ -156,7 +184,7 @@ export function OperationsCommandCentre({
       </section>
 
       <section className="panel operations-quality-panel">
-        <div className="section-heading compact"><div><p className="eyebrow">LISTING QUALITY</p><h2>Missing evidence</h2></div></div>
+        <SectionHeader eyebrow="LISTING QUALITY" title="Missing evidence" compact />
         <div className="operations-quality-grid">
           <button type="button" onClick={onOpenPipeline}><span>Measurements missing</span><strong>{operations.missingMeasurements}</strong></button>
           <button type="button" onClick={() => onOpenInventory()}><span>Condition missing</span><strong>{operations.missingCondition}</strong></button>
@@ -164,7 +192,7 @@ export function OperationsCommandCentre({
       </section>
 
       <section className="panel operations-week-panel">
-        <div className="section-heading compact"><div><p className="eyebrow">LAST SEVEN DAYS</p><h2>Recorded productivity</h2></div></div>
+        <SectionHeader eyebrow="LAST SEVEN DAYS" title="Recorded productivity" compact />
         <div className="operations-week-grid">
           <div><span>Sourced</span><strong>{operations.weekly.sourced}</strong></div>
           <div><span>Photographed</span><strong>{operations.weekly.photographed}</strong></div>
