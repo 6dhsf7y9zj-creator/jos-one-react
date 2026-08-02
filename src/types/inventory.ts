@@ -38,8 +38,36 @@ export interface OrderRecord {
   deadline: string;
 }
 
+export type FinanceTransactionType =
+  | 'sale'
+  | 'expense'
+  | 'owner-funding'
+  | 'owner-withdrawal'
+  | 'tax-reserve-in'
+  | 'tax-reserve-out';
+
+export interface FinanceTransaction {
+  id: string;
+  date: string;
+  type: FinanceTransactionType;
+  category: string;
+  amount: number;
+  description: string;
+  sku?: string;
+  notes?: string;
+}
+
+export interface FinanceState {
+  openingCash: number;
+  emergencyReserve: number;
+  plannedSourcingBudget: number;
+  taxPlanningRate: number;
+  transactions: FinanceTransaction[];
+}
+
 export interface JosSettings {
   minimumProfit: number;
   targetRoi: number;
   storageLocations: string[];
+  finance?: FinanceState;
 }

@@ -1,4 +1,4 @@
-import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from '../types/inventory'
+import type { FinanceState, FinanceTransaction, FinanceTransactionType, InventoryItem, JosSettings, OrderRecord, StockStatus } from '../types/inventory'
 
 export type JosBackup = {
   version: string
@@ -26,6 +26,51 @@ function statusValue(value: unknown): StockStatus {
 
 function gradeValue(value: unknown): InventoryItem['grade'] {
   return value === 'A' || value === 'B' || value === 'C' || value === 'Exit' ? value : 'B'
+}
+
+
+const validFinanceTypes: FinanceTransactionType[] = [
+  'sale',
+  'expense',
+  'owner-funding',
+  'owner-withdrawal',
+  'tax-reserve-in',
+  'tax-reserve-out',
+]
+
+function financeTypeValue(value: unknown): FinanceTransactionType {
+  const type = textValue(value) as FinanceTransactionType
+  return validFinanceTypes.includes(type) ? type : 'expense'
+}
+
+function financeStateValue(value: unknown): FinanceState | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const raw = value as Record<string, unknown>
+  const transactions: FinanceTransaction[] = Array.isArray(raw.transactions)
+    ? raw.transactions
+        .filter(entry => entry && typeof entry === 'object')
+        .map((entry, index) => {
+          const record = entry as Record<string, unknown>
+          return {
+            id: textValue(record.id, `MIGRATED-FIN-${index + 1}`),
+            date: textValue(record.date, new Date().toISOString().slice(0, 10)),
+            type: financeTypeValue(record.type),
+            category: textValue(record.category, 'Other'),
+            amount: Math.max(0, numberValue(record.amount)),
+            description: textValue(record.description, 'Migrated finance entry'),
+            sku: textValue(record.sku) || undefined,
+            notes: textValue(record.notes) || undefined,
+          }
+        })
+    : []
+
+  return {
+    openingCash: numberValue(raw.openingCash),
+    emergencyReserve: numberValue(raw.emergencyReserve),
+    plannedSourcingBudget: numberValue(raw.plannedSourcingBudget),
+    taxPlanningRate: numberValue(raw.taxPlanningRate, 20),
+    transactions,
+  }
 }
 
 export function migrateBackup(input: unknown): JosBackup {
@@ -94,6 +139,7 @@ export function migrateBackup(input: unknown): JosBackup {
     storageLocations: Array.isArray(rawSettings.storageLocations)
       ? rawSettings.storageLocations.filter((value): value is string => typeof value === 'string')
       : [],
+    finance: financeStateValue(rawSettings.finance),
   }
 
   return {
@@ -106,7 +152,7 @@ export function migrateBackup(input: unknown): JosBackup {
 
 export function createBackup(items: InventoryItem[], orders: OrderRecord[], settings: JosSettings): JosBackup {
   return {
-    version: '2.4.0',
+    version: '2.5.0',
     exportedAt: new Date().toISOString(),
     items,
     orders,

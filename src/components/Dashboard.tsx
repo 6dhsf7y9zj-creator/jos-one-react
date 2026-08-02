@@ -9,6 +9,7 @@ type DashboardProps = {
   onOpenOrders: () => void
   onOpenAdd: () => void
   onOpenSourceCheck: () => void
+  onOpenFinance: () => void
 }
 
 function greeting(): string {
@@ -36,6 +37,7 @@ export function Dashboard({
   onOpenOrders,
   onOpenAdd,
   onOpenSourceCheck,
+  onOpenFinance,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const firstMission = metrics.missions[0]
@@ -151,7 +153,7 @@ export function Dashboard({
             <strong>{formatCeoMoney(metrics.expectedProfit)}</strong>
             <small>Before tax and unrecorded costs</small>
           </button>
-          <button type="button" onClick={onOpenOrders}>
+          <button type="button" onClick={onOpenFinance}>
             <span>Realised profit recorded</span>
             <strong>{formatCeoMoney(metrics.realisedProfit)}</strong>
             <small>{formatCeoMoney(metrics.realisedRevenue)} sale revenue entered</small>
@@ -268,7 +270,7 @@ export function Dashboard({
           <button type="button" onClick={onOpenAdd}>Add stock</button>
           <button type="button" onClick={onOpenSourceCheck}>Run SourceCheck</button>
           <button type="button" onClick={onOpenOrders}>Open orders</button>
-          <button type="button" onClick={() => onOpenInventory()}>Inventory command</button>
+          <button type="button" onClick={onOpenFinance}>Finance command</button>
         </div>
         <p className="ceo-targets">
           Current sourcing rules: minimum {formatCeoMoney(settings.minimumProfit)} expected profit

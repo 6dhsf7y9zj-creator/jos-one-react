@@ -6,6 +6,7 @@ import { BackupCenter } from './components/BackupCenter'
 import { AddItem } from './components/AddItem'
 import { SourceCheck } from './components/SourceCheck'
 import { Orders } from './components/Orders'
+import { FinanceCommandCentre } from './components/FinanceCommandCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -26,9 +27,16 @@ const defaultSettings: JosSettings = {
   minimumProfit: 15,
   targetRoi: 150,
   storageLocations: ['Box A1', 'Box A2', 'Box B1', 'Rail 1', 'Shelf 1'],
+  finance: {
+    openingCash: 0,
+    emergencyReserve: 0,
+    plannedSourcingBudget: 0,
+    taxPlanningRate: 20,
+    transactions: [],
+  },
 }
 
-type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'backup'
+type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'finance' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -107,6 +115,7 @@ export default function App() {
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
     orders: 'Orders',
+    finance: 'Finance Command Centre',
     backup: 'Backup Centre',
   }
 
@@ -115,7 +124,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.4.0</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.5.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -126,14 +135,24 @@ export default function App() {
             })}
           </p>
         </div>
-        <button
-          type="button"
-          className={`backup-shortcut ${tab === 'backup' ? 'active' : ''}`}
-          onClick={() => changeTab('backup')}
-          aria-label="Open Backup Centre"
-        >
-          ⇅
-        </button>
+        <div className="header-shortcuts">
+          <button
+            type="button"
+            className={`finance-shortcut ${tab === 'finance' ? 'active' : ''}`}
+            onClick={() => changeTab('finance')}
+            aria-label="Open Finance Command Centre"
+          >
+            £
+          </button>
+          <button
+            type="button"
+            className={`backup-shortcut ${tab === 'backup' ? 'active' : ''}`}
+            onClick={() => changeTab('backup')}
+            aria-label="Open Backup Centre"
+          >
+            ⇅
+          </button>
+        </div>
       </header>
 
       {tab === 'home' && (
@@ -145,6 +164,7 @@ export default function App() {
           onOpenOrders={() => changeTab('orders')}
           onOpenAdd={() => changeTab('add')}
           onOpenSourceCheck={() => changeTab('sourcecheck')}
+          onOpenFinance={() => changeTab('finance')}
         />
       )}
       {tab === 'inventory' && (
@@ -159,6 +179,13 @@ export default function App() {
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
       {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
       {tab === 'orders' && <Orders orders={orders} />}
+      {tab === 'finance' && (
+        <FinanceCommandCentre
+          items={items}
+          finance={settings.finance}
+          onChange={finance => setSettings(current => ({ ...current, finance }))}
+        />
+      )}
       {tab === 'backup' && (
         <BackupCenter
           items={items}
