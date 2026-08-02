@@ -8,6 +8,7 @@ import {
   nextStatus,
   normaliseInventoryText,
 } from '../lib/inventory'
+import { EmptyState, JosButton, KpiCard, NoticeCard } from '../ui'
 
 type InventoryProps = {
   items: InventoryItem[]
@@ -262,29 +263,26 @@ export function Inventory({
           <h2>{filtered.length} items in view</h2>
           <p>Search, control and progress every stock item from one screen.</p>
         </div>
-        <button type="button" className="inventory-export" onClick={() => downloadCsv(filtered)}>
+        <JosButton variant="primary" onClick={() => downloadCsv(filtered)}>
           Export CSV
-        </button>
+        </JosButton>
       </section>
 
-      <section className="inventory-kpis" aria-label="Current inventory totals">
-        <div><span>Stock cost</span><strong>£{totals.cost.toFixed(2)}</strong></div>
-        <div><span>Expected sales</span><strong>£{totals.expectedSale.toFixed(2)}</strong></div>
-        <div><span>Expected profit</span><strong>£{totals.profit.toFixed(2)}</strong></div>
-        <div><span>Average ROI</span><strong>{totals.averageRoi.toFixed(0)}%</strong></div>
+      <section className="jos-kpi-grid" aria-label="Current inventory totals">
+        <KpiCard label="Stock cost" value={`£${totals.cost.toFixed(2)}`} />
+        <KpiCard label="Expected sales" value={`£${totals.expectedSale.toFixed(2)}`} tone="information" />
+        <KpiCard label="Expected profit" value={`£${totals.profit.toFixed(2)}`} tone="positive" />
+        <KpiCard label="Average ROI" value={`${totals.averageRoi.toFixed(0)}%`} tone="positive" />
       </section>
 
       {duplicateSkuList.length > 0 && (
-        <section className="inventory-warning">
-          <strong>Duplicate SKU warning</strong>
-          <span>{duplicateSkuList.join(', ')}</span>
-        </section>
+        <NoticeCard title="Duplicate SKU warning" tone="urgent">
+          {duplicateSkuList.join(', ')}
+        </NoticeCard>
       )}
 
       {notice && (
-        <button type="button" className="inventory-notice" onClick={() => setNotice('')}>
-          {notice} <span>×</span>
-        </button>
+        <NoticeCard title={notice} tone="positive" onDismiss={() => setNotice('')} />
       )}
 
       <section className="inventory-tools command-tools">
@@ -418,11 +416,15 @@ export function Inventory({
 
       <div className="inventory-list command-list">
         {filtered.length === 0 ? (
-          <section className="empty-state panel">
-            <h3>No matching stock</h3>
-            <p>Try another status, clear the filters or change the search.</p>
-            <button type="button" onClick={clearFilters}>Show all inventory</button>
-          </section>
+          <EmptyState
+            title="No matching stock"
+            description="Try another status, clear the filters or change the search."
+            action={
+              <JosButton variant="secondary" onClick={clearFilters}>
+                Show all inventory
+              </JosButton>
+            }
+          />
         ) : filtered.map(item => {
           const profit = expectedProfit(item)
           const roi = itemRoi(item)

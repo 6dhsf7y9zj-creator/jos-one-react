@@ -1,5 +1,6 @@
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from '../types/inventory'
 import { calculateCeoDashboard, formatCeoMoney, type CeoMission } from '../lib/dashboard'
+import { JosButton, KpiCard, SectionHeader } from '../ui'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -127,37 +128,44 @@ export function Dashboard({
       </section>
 
       <section aria-labelledby="ceo-position">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">FINANCIAL POSITION</p>
-            <h2 id="ceo-position">What current records support</h2>
-          </div>
-          <button type="button" className="text-button" onClick={() => onOpenInventory()}>
-            Open stock
-          </button>
-        </div>
+        <SectionHeader
+          eyebrow="FINANCIAL POSITION"
+          title="What current records support"
+          action={
+            <JosButton variant="ghost" onClick={() => onOpenInventory()}>
+              Open stock
+            </JosButton>
+          }
+        />
 
-        <div className="ceo-kpis">
-          <button type="button" onClick={() => onOpenInventory()}>
-            <span>Cash tied in active stock</span>
-            <strong>{formatCeoMoney(metrics.inventoryCost)}</strong>
-            <small>{metrics.activeItems} active items</small>
-          </button>
-          <button type="button" onClick={() => onOpenInventory()}>
-            <span>Expected sales value</span>
-            <strong>{formatCeoMoney(metrics.expectedSales)}</strong>
-            <small>Forecast, not guaranteed revenue</small>
-          </button>
-          <button type="button" onClick={() => onOpenInventory()}>
-            <span>Expected gross profit</span>
-            <strong>{formatCeoMoney(metrics.expectedProfit)}</strong>
-            <small>Before tax and unrecorded costs</small>
-          </button>
-          <button type="button" onClick={onOpenFinance}>
-            <span>Realised profit recorded</span>
-            <strong>{formatCeoMoney(metrics.realisedProfit)}</strong>
-            <small>{formatCeoMoney(metrics.realisedRevenue)} sale revenue entered</small>
-          </button>
+        <div className="jos-kpi-grid">
+          <KpiCard
+            label="Cash tied in active stock"
+            value={formatCeoMoney(metrics.inventoryCost)}
+            detail={`${metrics.activeItems} active items`}
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Expected sales value"
+            value={formatCeoMoney(metrics.expectedSales)}
+            detail="Forecast, not guaranteed revenue"
+            tone="information"
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Expected gross profit"
+            value={formatCeoMoney(metrics.expectedProfit)}
+            detail="Before tax and unrecorded costs"
+            tone="positive"
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Realised profit recorded"
+            value={formatCeoMoney(metrics.realisedProfit)}
+            detail={`${formatCeoMoney(metrics.realisedRevenue)} sale revenue entered`}
+            tone={metrics.realisedProfit >= 0 ? 'positive' : 'urgent'}
+            onClick={onOpenFinance}
+          />
         </div>
 
         <p className="ceo-data-truth">
@@ -167,12 +175,7 @@ export function Dashboard({
       </section>
 
       <section className="panel ceo-workflow-panel">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">WORKFLOW FUNNEL</p>
-            <h2>Where stock is waiting</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="WORKFLOW FUNNEL" title="Where stock is waiting" compact />
 
         <div className="workflow-funnel">
           {workflow.map(stage => (
@@ -188,12 +191,7 @@ export function Dashboard({
       </section>
 
       <section className="panel ceo-brands-panel">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">BRAND FORECAST</p>
-            <h2>Where expected profit currently sits</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="BRAND FORECAST" title="Where expected profit currently sits" compact />
 
         {topBrands.length === 0 ? (
           <p className="ceo-empty">No active inventory is available for brand analysis.</p>
@@ -219,12 +217,7 @@ export function Dashboard({
       </section>
 
       <section className="panel ceo-alerts-panel">
-        <div className="section-heading compact">
-          <div>
-            <p className="eyebrow">CEO ALERTS</p>
-            <h2>Decisions that need attention</h2>
-          </div>
-        </div>
+        <SectionHeader eyebrow="CEO ALERTS" title="Decisions that need attention" compact />
 
         <button type="button" className="ceo-alert-row" onClick={onOpenOrders}>
           <span className={metrics.ordersWaiting > 0 || metrics.soldItems > 0 ? 'alert-dot urgent' : 'alert-dot good'} />
