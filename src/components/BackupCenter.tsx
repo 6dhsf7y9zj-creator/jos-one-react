@@ -28,6 +28,8 @@ type Comparison = {
 }
 
 const UNDO_SNAPSHOT_KEY = 'jos-one-react-last-recovery-checkpoint'
+const LAST_EXPORT_KEY = 'jos-one-react-last-off-device-export'
+const OFF_DEVICE_REMINDER_DAYS = 7
 
 function downloadJson(backup: JosBackup, filename: string): void {
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
@@ -93,6 +95,20 @@ function backupAgeHours(createdAt: string): number {
   return Math.max(0, (Date.now() - new Date(createdAt).getTime()) / 3_600_000)
 }
 
+function backupAgeDays(createdAt: string | null): number {
+  if (!createdAt) return Infinity
+  return Math.max(0, (Date.now() - new Date(createdAt).getTime()) / 86_400_000)
+}
+
+function verifyBackup(backup: JosBackup): boolean {
+  try {
+    migrateBackup(backup)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export function BackupCenter({ items, orders, settings, onRestore }: BackupCenterProps) {
   const fileInput = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState('')
@@ -100,6 +116,13 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
   const [snapshots, setSnapshots] = useState<AutoBackupSnapshot[]>([])
   const [selectedSnapshot, setSelectedSnapshot] = useState<AutoBackupSnapshot | null>(null)
   const [recoveryOpen, setRecoveryOpen] = useState(false)
+  const [lastOffDeviceExport, setLastOffDeviceExport] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(LAST_EXPORT_KEY)
+    } catch {
+      return null
+    }
+  })
   const [undoSnapshotId, setUndoSnapshotId] = useState<string | null>(() => {
     try {
       return localStorage.getItem(UNDO_SNAPSHOT_KEY)
@@ -121,6 +144,9 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
   }, [items, orders, settings])
 
   const latest = snapshots[0]
+  const verifiedSnapshots = useMemo(() => snapshots.filter(snapshot => verifyBackup(snapshot.backup)).length, [snapshots])
+  const offDeviceAge = backupAgeDays(lastOffDeviceExport)
+  const offDeviceDue = offDeviceAge >= OFF_DEVICE_REMINDER_DAYS
   const latestAge = latest ? backupAgeHours(latest.createdAt) : Infinity
   const health = !latest
     ? { label: 'No backup exists', tone: 'danger', detail: 'Create a snapshot before making more changes.' }
@@ -182,12 +208,44 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
     if (fileInput.current) fileInput.current.value = ''
   }
 
+  const recordOffDeviceExport = () => {
+    const exportedAt = new Date().toISOString()
+    setLastOffDeviceExport(exportedAt)
+    try {
+      localStorage.setItem(LAST_EXPORT_KEY, exportedAt)
+    } catch {
+      // The download still succeeds even when the reminder timestamp cannot be saved.
+    }
+  }
+
   const downloadBackup = () => {
     const backup = createBackup(items, orders, settings)
     downloadJson(backup, `JOS-One-backup-${new Date().toISOString().slice(0, 10)}.json`)
     saveAutoBackup(items, orders, settings, 'manual')
+    recordOffDeviceExport()
     refreshSnapshots()
     setMessage(`Backup exported with ${items.length} items.`)
+  }
+
+  const downloadRecoveryPack = () => {
+    const pack = {
+      format: 'JOS-Recovery-Pack',
+      version: '1.0',
+      createdAt: new Date().toISOString(),
+      current: createBackup(items, orders, settings),
+      snapshots,
+    }
+    const blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = `JOS-One-recovery-pack-${new Date().toISOString().slice(0, 10)}.json`
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    URL.revokeObjectURL(url)
+    recordOffDeviceExport()
+    setMessage(`Recovery pack downloaded with the current backup and ${snapshots.length} snapshots.`)
   }
 
   const createSnapshotNow = () => {
@@ -282,6 +340,17 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
           <div><span>Local storage used</span><strong>{formatBytes(totalStorage)}</strong></div>
           <div><span>Inventory protected</span><strong>{latest?.itemCount ?? 0}</strong></div>
           <div><span>Orders protected</span><strong>{latest?.orderCount ?? 0}</strong></div>
+          <div><span>Verified snapshots</span><strong>{verifiedSnapshots}/{snapshots.length}</strong></div>
+          <div><span>Off-device copy</span><strong>{lastOffDeviceExport ? formatDate(lastOffDeviceExport) : 'Due now'}</strong></div>
+        </div>
+
+        <div className={`off-device-status ${offDeviceDue ? 'due' : 'current'}`}>
+          <strong>{offDeviceDue ? 'Off-device backup due' : 'Off-device backup current'}</strong>
+          <span>
+            {lastOffDeviceExport
+              ? `Last downloaded ${Math.floor(offDeviceAge)} day${Math.floor(offDeviceAge) === 1 ? '' : 's'} ago.`
+              : 'No downloaded recovery copy has been recorded on this device.'}
+          </span>
         </div>
 
         <button type="button" className="secondary-action" onClick={createSnapshotNow}>
@@ -405,7 +474,13 @@ export function BackupCenter({ items, orders, settings, onRestore }: BackupCente
           <div><dt>Orders</dt><dd>{orders.length}</dd></div>
           <div><dt>Minimum profit</dt><dd>£{settings.minimumProfit.toFixed(2)}</dd></div>
         </dl>
-        <button type="button" className="primary-action" onClick={downloadBackup}>Download full backup</button>
+        <button type="button" className="primary-action" onClick={downloadBackup}>Download current backup</button>
+        <button type="button" className="secondary-action recovery-pack-action" onClick={downloadRecoveryPack}>
+          Download complete recovery pack
+        </button>
+        <p className="recovery-pack-note">
+          The recovery pack includes your current records plus the complete local snapshot history in one file.
+        </p>
       </section>
 
       <section className="panel backup-card">

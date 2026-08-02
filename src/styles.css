@@ -693,3 +693,29 @@ h1, h2, h3 {
   .recovery-overlay { align-items: center; }
   .recovery-dialog { width: min(600px, 100%); margin: auto; }
 }
+
+/* Version 0.2.4 — completed Backup Centre */
+.off-device-status {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid #9fbea8;
+  border-radius: 16px;
+  background: #edf7ef;
+}
+.off-device-status.due {
+  border-color: #d3ad58;
+  background: #fff7e6;
+}
+.off-device-status strong { color: #3f2a1e; }
+.off-device-status span { color: #806d5f; font-size: .78rem; line-height: 1.4; }
+.recovery-pack-action { margin-top: 10px; }
+.recovery-pack-note {
+  margin: 10px 0 0;
+  color: #806d5f;
+  font-size: .76rem;
+  line-height: 1.45;
+  text-align: center;
+}
+.backup-health-grid { grid-template-columns: 1fr 1fr; }

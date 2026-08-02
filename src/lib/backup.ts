@@ -106,7 +106,7 @@ export function migrateBackup(input: unknown): JosBackup {
 
 export function createBackup(items: InventoryItem[], orders: OrderRecord[], settings: JosSettings): JosBackup {
   return {
-    version: '2.3.0',
+    version: '2.4.0',
     exportedAt: new Date().toISOString(),
     items,
     orders,

@@ -106,7 +106,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.2.3</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.2.4</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
