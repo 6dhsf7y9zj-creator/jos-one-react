@@ -11,10 +11,12 @@ export function nextStatus(status: StockStatus): StockStatus {
   return lifecycle[Math.min(index + 1, lifecycle.length - 1)];
 }
 
-export function createSku(existing: InventoryItem[]): string {
+export function generateSku(existing: InventoryItem[]): string {
   const highest = existing.reduce((max, item) => {
     const match = item.sku.match(/(\d+)$/);
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
   return `JAE-${String(highest + 1).padStart(4, '0')}`;
 }
+
+export const createSku = generateSku;
