@@ -163,13 +163,7 @@ export function calculateBusinessIntelligence(
     realisedRevenue: entry.realisedRevenue,
     realisedProfit: entry.realisedProfit,
     averageDaysToSell: entry.daysCount ? entry.daysSum / entry.daysCount : undefined,
-    dataConfidence: (
-  entry.realisedSales >= 5
-    ? 'developing'
-    : entry.realisedSales > 0
-      ? 'limited'
-      : 'forecast-only'
-) as BrandIntelligence['dataConfidence'],
+    dataConfidence: entry.realisedSales >= 5 ? 'developing' : entry.realisedSales > 0 ? 'limited' : 'forecast-only',
   })).sort((a, b) => (b.realisedProfit || b.forecastProfit) - (a.realisedProfit || a.forecastProfit))
 
   const months: MonthlyTrend[] = []

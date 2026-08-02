@@ -1,4 +1,4 @@
-import type { FinanceState, FinanceTransaction, FinanceTransactionType, InventoryItem, JosSettings, OrderRecord, StockStatus } from '../types/inventory'
+import type { FinanceState, FinanceTransaction, FinanceTransactionType, InventoryItem, JosSettings, ListingChecklist, ListingPipelineStage, OrderRecord, PhotoChecklist, StockStatus } from '../types/inventory'
 
 export type JosBackup = {
   version: string
@@ -28,6 +28,32 @@ function gradeValue(value: unknown): InventoryItem['grade'] {
   return value === 'A' || value === 'B' || value === 'C' || value === 'Exit' ? value : 'B'
 }
 
+
+
+const validPipelineStages: ListingPipelineStage[] = [
+  'Preparation',
+  'Photography',
+  'Photo Review',
+  'Listing Copy',
+  'Ready to Upload',
+  'Live',
+]
+
+function pipelineStageValue(value: unknown): ListingPipelineStage | undefined {
+  const stage = textValue(value) as ListingPipelineStage
+  return validPipelineStages.includes(stage) ? stage : undefined
+}
+
+function booleanRecord<T extends Record<string, boolean>>(
+  value: unknown,
+  fallback: T,
+): T {
+  if (!value || typeof value !== 'object') return fallback
+  const raw = value as Record<string, unknown>
+  return Object.fromEntries(
+    Object.keys(fallback).map(key => [key, raw[key] === true]),
+  ) as T
+}
 
 const validFinanceTypes: FinanceTransactionType[] = [
   'sale',
@@ -110,6 +136,33 @@ export function migrateBackup(input: unknown): JosBackup {
       action: textValue(item.action),
       listingStage: textValue(item.listingStage),
       platform: textValue(item.platform),
+      colour: textValue(item.colour) || undefined,
+      notes: textValue(item.notes) || undefined,
+      actualSalePrice: item.actualSalePrice === undefined ? undefined : numberValue(item.actualSalePrice),
+      dateSourced: textValue(item.dateSourced) || undefined,
+      dateListed: textValue(item.dateListed) || undefined,
+      dateSold: textValue(item.dateSold) || undefined,
+      pipelineStage: pipelineStageValue(item.pipelineStage),
+      photoChecklist: booleanRecord<PhotoChecklist>(item.photoChecklist, {
+        front: false,
+        back: false,
+        brandLabel: false,
+        sizeLabel: false,
+        careLabel: false,
+        measurements: false,
+        defects: false,
+      }),
+      listingChecklist: booleanRecord<ListingChecklist>(item.listingChecklist, {
+        title: false,
+        description: false,
+        measurements: false,
+        condition: false,
+        price: false,
+        platform: false,
+      }),
+      photographyStartedAt: textValue(item.photographyStartedAt) || undefined,
+      photographyCompletedAt: textValue(item.photographyCompletedAt) || undefined,
+      listingReadyAt: textValue(item.listingReadyAt) || undefined,
     }
   })
 
@@ -152,7 +205,7 @@ export function migrateBackup(input: unknown): JosBackup {
 
 export function createBackup(items: InventoryItem[], orders: OrderRecord[], settings: JosSettings): JosBackup {
   return {
-    version: '2.5.0',
+    version: '2.7.0',
     exportedAt: new Date().toISOString(),
     items,
     orders,

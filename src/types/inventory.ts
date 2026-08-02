@@ -1,5 +1,32 @@
 export type StockStatus = 'Prep' | 'Photographed' | 'Live' | 'Sold' | 'Dispatched' | 'Archived';
 
+export type ListingPipelineStage =
+  | 'Preparation'
+  | 'Photography'
+  | 'Photo Review'
+  | 'Listing Copy'
+  | 'Ready to Upload'
+  | 'Live';
+
+export interface PhotoChecklist {
+  front: boolean;
+  back: boolean;
+  brandLabel: boolean;
+  sizeLabel: boolean;
+  careLabel: boolean;
+  measurements: boolean;
+  defects: boolean;
+}
+
+export interface ListingChecklist {
+  title: boolean;
+  description: boolean;
+  measurements: boolean;
+  condition: boolean;
+  price: boolean;
+  platform: boolean;
+}
+
 export interface InventoryItem {
   sku: string;
   brand: string;
@@ -28,6 +55,12 @@ export interface InventoryItem {
   dateSourced?: string;
   dateListed?: string;
   dateSold?: string;
+  pipelineStage?: ListingPipelineStage;
+  photoChecklist?: PhotoChecklist;
+  listingChecklist?: ListingChecklist;
+  photographyStartedAt?: string;
+  photographyCompletedAt?: string;
+  listingReadyAt?: string;
 }
 
 export interface OrderRecord {

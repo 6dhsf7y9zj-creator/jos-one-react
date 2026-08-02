@@ -8,6 +8,7 @@ import { SourceCheck } from './components/SourceCheck'
 import { Orders } from './components/Orders'
 import { FinanceCommandCentre } from './components/FinanceCommandCentre'
 import { BusinessIntelligence } from './components/BusinessIntelligence'
+import { PhotographyListingPipeline } from './components/PhotographyListingPipeline'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -37,7 +38,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -116,6 +117,7 @@ export default function App() {
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
     orders: 'Orders',
+    pipeline: 'Photography & Listing Pipeline',
     finance: 'Finance Command Centre',
     intelligence: 'Business Intelligence',
     backup: 'Backup Centre',
@@ -126,7 +128,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.6.0</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.7.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -138,6 +140,14 @@ export default function App() {
           </p>
         </div>
         <div className="header-shortcuts">
+          <button
+            type="button"
+            className={`pipeline-shortcut ${tab === 'pipeline' ? 'active' : ''}`}
+            onClick={() => changeTab('pipeline')}
+            aria-label="Open Photography and Listing Pipeline"
+          >
+            ◉
+          </button>
           <button
             type="button"
             className={`intelligence-shortcut ${tab === 'intelligence' ? 'active' : ''}`}
@@ -189,6 +199,13 @@ export default function App() {
       {tab === 'add' && <AddItem items={items} settings={settings} onSave={addItem} />}
       {tab === 'sourcecheck' && <SourceCheck settings={settings} />}
       {tab === 'orders' && <Orders orders={orders} />}
+      {tab === 'pipeline' && (
+        <PhotographyListingPipeline
+          items={items}
+          onUpdate={updateItem}
+          onUpdateMany={updateManyItems}
+        />
+      )}
       {tab === 'finance' && (
         <FinanceCommandCentre
           items={items}
