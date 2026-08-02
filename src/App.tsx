@@ -127,62 +127,81 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-bar">
-        <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
-        <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.8.0</p>
-          <h1>{titles[tab]}</h1>
-          <p className="header-date">
-            {new Date().toLocaleDateString('en-GB', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </p>
+      <header className="jos-universal-header">
+        <div className="jos-header-identity">
+          <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
+          <div className="app-title">
+            <p className="eyebrow">JOS ONE · VERSION 0.9.0</p>
+            <h1>{titles[tab]}</h1>
+            <p className="header-date">
+              {new Date().toLocaleDateString('en-GB', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </p>
+          </div>
         </div>
-        <div className="header-shortcuts">
+
+        <nav className="jos-module-nav" aria-label="JOS modules">
           <button
             type="button"
-            className={`operations-shortcut ${tab === 'operations' ? 'active' : ''}`}
+            className={tab === 'home' ? 'active' : ''}
+            onClick={() => changeTab('home')}
+          >
+            <span className="module-nav-icon">⌂</span>
+            <span>Dashboard</span>
+          </button>
+          <button
+            type="button"
+            className={tab === 'inventory' ? 'active' : ''}
+            onClick={() => changeTab('inventory')}
+          >
+            <span className="module-nav-icon">▤</span>
+            <span>Inventory</span>
+          </button>
+          <button
+            type="button"
+            className={tab === 'operations' ? 'active' : ''}
             onClick={() => changeTab('operations')}
-            aria-label="Open Operations Command Centre"
           >
-            ✓
+            <span className="module-nav-icon">✓</span>
+            <span>Operations</span>
           </button>
           <button
             type="button"
-            className={`pipeline-shortcut ${tab === 'pipeline' ? 'active' : ''}`}
+            className={tab === 'pipeline' ? 'active' : ''}
             onClick={() => changeTab('pipeline')}
-            aria-label="Open Photography and Listing Pipeline"
           >
-            ◉
+            <span className="module-nav-icon">◉</span>
+            <span>Pipeline</span>
           </button>
           <button
             type="button"
-            className={`intelligence-shortcut ${tab === 'intelligence' ? 'active' : ''}`}
+            className={tab === 'intelligence' ? 'active' : ''}
             onClick={() => changeTab('intelligence')}
-            aria-label="Open Business Intelligence"
           >
-            ◈
+            <span className="module-nav-icon">◈</span>
+            <span>Intelligence</span>
           </button>
           <button
             type="button"
-            className={`finance-shortcut ${tab === 'finance' ? 'active' : ''}`}
+            className={tab === 'finance' ? 'active' : ''}
             onClick={() => changeTab('finance')}
-            aria-label="Open Finance Command Centre"
           >
-            £
+            <span className="module-nav-icon">£</span>
+            <span>Finance</span>
           </button>
           <button
             type="button"
-            className={`backup-shortcut ${tab === 'backup' ? 'active' : ''}`}
+            className={tab === 'backup' ? 'active' : ''}
             onClick={() => changeTab('backup')}
-            aria-label="Open Backup Centre"
           >
-            ⇅
+            <span className="module-nav-icon">⇅</span>
+            <span>Backup</span>
           </button>
-        </div>
+        </nav>
       </header>
 
       {tab === 'home' && (

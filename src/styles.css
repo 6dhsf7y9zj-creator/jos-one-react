@@ -2392,3 +2392,218 @@ h1, h2, h3 {
 .operations-empty { color:#806d5f; }
 @media (max-width:430px) { .operations-hero { grid-template-columns:1fr; } .operations-score { grid-template-columns:auto auto 1fr; min-height:auto; justify-content:start; gap:8px; text-align:left; } .operations-score strong { font-size:2.35rem; } }
 @media (min-width:700px) { .operations-kpis { grid-template-columns:repeat(4,1fr); } }
+
+
+/* ==========================================================
+   JOS One v0.9.0 — Universal Design System
+   Global header and module navigation
+   ========================================================== */
+
+:root {
+  --jos-bg: #f4ede1;
+  --jos-card: #fffaf2;
+  --jos-card-soft: #f8f0e4;
+  --jos-brown: #573622;
+  --jos-brown-dark: #3a2418;
+  --jos-gold: #a87b2c;
+  --jos-gold-soft: #dec9a9;
+  --jos-muted: #806d5f;
+  --jos-positive: #2f7045;
+  --jos-warning: #a66f12;
+  --jos-urgent: #963f34;
+  --jos-radius-large: 26px;
+  --jos-radius-medium: 18px;
+  --jos-shadow: 0 12px 32px rgba(72, 42, 25, .06);
+}
+
+.jos-universal-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid #dfcfb5;
+  background: rgba(244, 237, 225, .96);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 7px 22px rgba(72, 42, 25, .05);
+}
+
+.jos-header-identity {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 15px;
+  align-items: center;
+  width: min(100%, 820px);
+  margin: 0 auto;
+  padding:
+    calc(15px + env(safe-area-inset-top))
+    18px
+    13px;
+}
+
+.jos-header-identity img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 7px 20px rgba(72, 42, 25, .16);
+}
+
+.jos-header-identity .app-title {
+  min-width: 0;
+}
+
+.jos-header-identity .eyebrow {
+  margin-bottom: 4px;
+  font-size: .63rem;
+  letter-spacing: .17em;
+  white-space: nowrap;
+}
+
+.jos-header-identity h1 {
+  max-width: 100%;
+  margin: 0;
+  color: var(--jos-brown-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.55rem, 6.8vw, 2.15rem);
+  line-height: 1.02;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.jos-header-identity .header-date {
+  margin: 6px 0 0;
+  color: var(--jos-muted);
+  font-size: .79rem;
+  line-height: 1.25;
+}
+
+.jos-module-nav {
+  display: flex;
+  gap: 8px;
+  width: min(100%, 820px);
+  margin: 0 auto;
+  padding: 0 18px 12px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.jos-module-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.jos-module-nav button {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid #d8c6aa;
+  border-radius: 999px;
+  background: rgba(255, 250, 242, .92);
+  color: var(--jos-muted);
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 820;
+  white-space: nowrap;
+  scroll-snap-align: start;
+  box-shadow: 0 3px 10px rgba(72, 42, 25, .03);
+}
+
+.jos-module-nav button.active {
+  border-color: var(--jos-brown);
+  background: var(--jos-brown);
+  color: white;
+  box-shadow: 0 7px 16px rgba(87, 54, 34, .18);
+}
+
+.module-nav-icon {
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  font-size: .95rem;
+  line-height: 1;
+}
+
+.jos-module-nav button:focus-visible {
+  outline: 3px solid rgba(168, 123, 44, .3);
+  outline-offset: 2px;
+}
+
+/* Disable the obsolete crowded shortcut layout everywhere. */
+.header-shortcuts {
+  display: none !important;
+}
+
+/* Universal spacing and card rhythm. */
+.screen {
+  padding-top: 17px;
+}
+
+.hero-card,
+.panel,
+.item-card,
+.quick-actions,
+.empty-state {
+  border-radius: var(--jos-radius-large);
+  box-shadow: var(--jos-shadow);
+}
+
+.primary-action,
+.secondary-action {
+  border-radius: 15px;
+}
+
+/* Keep long module titles elegant on narrow phones. */
+@media (max-width: 390px) {
+  .jos-header-identity {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .jos-header-identity img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .jos-header-identity h1 {
+    font-size: 1.48rem;
+  }
+
+  .jos-header-identity .eyebrow {
+    font-size: .58rem;
+  }
+
+  .jos-module-nav {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .jos-module-nav button {
+    min-height: 40px;
+    padding: 0 11px;
+    font-size: .68rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .jos-header-identity {
+    grid-template-columns: 68px minmax(0, 1fr);
+    padding-top: calc(18px + env(safe-area-inset-top));
+  }
+
+  .jos-header-identity img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .jos-module-nav {
+    justify-content: center;
+  }
+}
