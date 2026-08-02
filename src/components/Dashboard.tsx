@@ -4,6 +4,7 @@ import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
 import { calculateExecutiveKpis } from '../lib/executiveKpis'
 import { formatFinanceMoney } from '../lib/finance'
 import { calculateBrandPerformance } from '../lib/brandPerformance'
+import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -15,6 +16,7 @@ type DashboardProps = {
   onOpenSourceCheck: () => void
   onOpenFinance: () => void
   onOpenBrandPerformance: () => void
+  onOpenRecommendations: () => void
 }
 
 function greeting(): string {
@@ -44,6 +46,7 @@ export function Dashboard({
   onOpenSourceCheck,
   onOpenFinance,
   onOpenBrandPerformance,
+  onOpenRecommendations,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
@@ -56,6 +59,7 @@ export function Dashboard({
       minimumProfit: settings.minimumProfit,
     },
   )
+  const recommendations = calculateCeoRecommendations(items, orders, settings)
   const topBrands = brandPerformance.brands.slice(0, 4)
   const workflow = [
     { label: 'Prep', count: metrics.prepItems, status: 'Prep' as StockStatus },
@@ -95,6 +99,26 @@ export function Dashboard({
             <strong>{reason.value}</strong>
           </div>
         ))}
+      </section>
+
+
+      <section className="ceo-decision-summary">
+        <div>
+          <p className="eyebrow light">CEO RECOMMENDATION ENGINE</p>
+          <h2>{recommendations.todayPlan[0]?.title ?? 'No immediate decision required'}</h2>
+          <p>
+            {recommendations.todayPlan[0]?.detail ??
+              'Current records do not show a higher-priority customer, revenue, cash or finance action.'}
+          </p>
+        </div>
+        <div className="ceo-decision-stats">
+          <span><strong>{recommendations.todayPlan.length}</strong> actions today</span>
+          <span><strong>{recommendations.planMinutes}</strong> planned minutes</span>
+          <span><strong>{recommendations.decisionConfidenceScore}</strong> confidence</span>
+        </div>
+        <JosButton variant="primary" fullWidth onClick={onOpenRecommendations}>
+          Open ranked decision plan
+        </JosButton>
       </section>
 
       <section className="ceo-mission-card">

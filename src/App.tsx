@@ -13,6 +13,7 @@ import { OperationsCommandCentre } from './components/OperationsCommandCentre'
 import { CeoReviewCentre } from './components/CeoReviewCentre'
 import { InventoryIntelligenceEngine } from './components/InventoryIntelligenceEngine'
 import { BrandPerformanceCentre } from './components/BrandPerformanceCentre'
+import { CeoRecommendationCentre } from './components/CeoRecommendationCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -42,7 +43,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'recommendations' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -127,6 +128,7 @@ export default function App() {
   const titles: Record<Tab, string> = {
     home: 'Mission Control',
     review: 'CEO Review Centre',
+    recommendations: 'CEO Recommendation Engine',
     inventory: 'Inventory Command Centre',
     'inventory-intelligence': 'Inventory Intelligence Engine',
     'brand-performance': 'Brand Performance Centre',
@@ -146,7 +148,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.3.2</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.4.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -173,6 +175,7 @@ export default function App() {
           onOpenBackup={() => changeTab('backup')}
           onOpenAdd={() => changeTab('add')}
           onOpenSourceCheck={() => changeTab('sourcecheck')}
+          onOpenRecommendations={() => changeTab('recommendations')}
         />
       )}
 
@@ -187,6 +190,22 @@ export default function App() {
           onOpenSourceCheck={() => changeTab('sourcecheck')}
           onOpenFinance={() => changeTab('finance')}
           onOpenBrandPerformance={() => changeTab('brand-performance')}
+          onOpenRecommendations={() => changeTab('recommendations')}
+        />
+      )}
+      {tab === 'recommendations' && (
+        <CeoRecommendationCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onOpenInventory={openInventory}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenFinance={() => changeTab('finance')}
+          onOpenBrandPerformance={() => changeTab('brand-performance')}
+          onOpenInventoryIntelligence={() => changeTab('inventory-intelligence')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+          onOpenOperations={() => changeTab('operations')}
         />
       )}
       {tab === 'inventory' && (
@@ -334,6 +353,10 @@ export default function App() {
               <button type="button" onClick={() => changeTab('review')}>
                 <span>◎</span><strong>CEO Review</strong><small>Executive briefing and priorities</small>
               </button>
+              <button type="button" onClick={() => changeTab('recommendations')}>
+                <span>⚡</span><strong>CEO Recommendations</strong><small>Ranked daily actions and sourcing control</small>
+              </button>
+
               <button type="button" onClick={() => changeTab('inventory-intelligence')}>
                 <span>◆</span><strong>Inventory Intelligence</strong><small>Stock health, grading and cash lock</small>
               </button>

@@ -3,6 +3,7 @@ import addItemSource from './components/AddItem.tsx?raw'
 import backupSource from './components/BackupCenter.tsx?raw'
 import brandSource from './components/BrandPerformanceCentre.tsx?raw'
 import intelligenceSource from './components/BusinessIntelligence.tsx?raw'
+import recommendationSource from './components/CeoRecommendationCentre.tsx?raw'
 import reviewSource from './components/CeoReviewCentre.tsx?raw'
 import dashboardSource from './components/Dashboard.tsx?raw'
 import financeSource from './components/FinanceCommandCentre.tsx?raw'
@@ -19,6 +20,7 @@ describe('App component completeness', () => {
     expect(backupSource).toContain('export function BackupCenter')
     expect(brandSource).toContain('export function BrandPerformanceCentre')
     expect(intelligenceSource).toContain('export function BusinessIntelligence')
+    expect(recommendationSource).toContain('export function CeoRecommendationCentre')
     expect(reviewSource).toContain('export function CeoReviewCentre')
     expect(dashboardSource).toContain('export function Dashboard')
     expect(financeSource).toContain('export function FinanceCommandCentre')

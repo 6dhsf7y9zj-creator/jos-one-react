@@ -7,6 +7,7 @@ import type {
 import { buildCeoReview, type ReviewPriority } from '../lib/ceoReview'
 import { formatFinanceMoney } from '../lib/finance'
 import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui'
+import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
 
 type Props = {
   items: InventoryItem[]
@@ -20,6 +21,7 @@ type Props = {
   onOpenBackup: () => void
   onOpenAdd: () => void
   onOpenSourceCheck: () => void
+  onOpenRecommendations: () => void
 }
 
 function priorityAction(priority: ReviewPriority, props: Props): () => void {
@@ -48,6 +50,8 @@ function ageText(hours?: number): string {
 
 export function CeoReviewCentre(props: Props) {
   const review = buildCeoReview(props.items, props.orders, props.settings)
+  const recommendations = calculateCeoRecommendations(props.items, props.orders, props.settings)
+  const topDecision = recommendations.todayPlan[0]
 
   return (
     <main className="screen ceo-review-centre">
@@ -113,21 +117,19 @@ export function CeoReviewCentre(props: Props) {
       </section>
 
       <section className="review-recommendation">
-        <p className="eyebrow light">TODAY&apos;S RECOMMENDATION</p>
-        <h2>{review.recommendation.title}</h2>
-        <p>{review.recommendation.explanation}</p>
+        <p className="eyebrow light">CEO RECOMMENDATION ENGINE</p>
+        <h2>{topDecision?.title ?? review.recommendation.title}</h2>
+        <p>{topDecision?.detail ?? review.recommendation.explanation}</p>
+        <small>
+          {recommendations.todayPlan.length} ranked actions · {recommendations.planMinutes} planned minutes ·
+          {` ${recommendations.decisionConfidenceScore}/100 confidence`}
+        </small>
         <JosButton
           variant="primary"
           fullWidth
-          onClick={priorityAction({
-            id: 'recommendation',
-            title: review.recommendation.title,
-            detail: review.recommendation.explanation,
-            urgency: 'normal',
-            destination: review.recommendation.destination,
-          }, props)}
+          onClick={props.onOpenRecommendations}
         >
-          Open recommended module
+          Open full decision plan
         </JosButton>
       </section>
 
@@ -266,6 +268,7 @@ export function CeoReviewCentre(props: Props) {
           <button type="button" onClick={props.onOpenFinance}>Finance</button>
           <button type="button" onClick={props.onOpenIntelligence}>Intelligence</button>
           <button type="button" onClick={props.onOpenSourceCheck}>SourceCheck</button>
+          <button type="button" onClick={props.onOpenRecommendations}>Decision engine</button>
         </div>
       </section>
 
