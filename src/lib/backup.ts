@@ -44,7 +44,7 @@ function pipelineStageValue(value: unknown): ListingPipelineStage | undefined {
   return validPipelineStages.includes(stage) ? stage : undefined
 }
 
-function booleanRecord<T extends Record<string, boolean>>(
+function booleanRecord<T extends object>(
   value: unknown,
   fallback: T,
 ): T {

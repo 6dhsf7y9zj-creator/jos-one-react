@@ -153,7 +153,7 @@ export function calculateBusinessIntelligence(
     brandMap.set(item.brand, entry)
   }
 
-  const brands: BrandIntelligence[] = [...brandMap.values()].map(entry => ({
+  const brands = [...brandMap.values()].map<BrandIntelligence>(entry => ({
     brand: entry.brand,
     activeItems: entry.activeItems,
     activeCost: entry.activeCost,
