@@ -445,3 +445,104 @@ h1, h2, h3 {
   .bottom-nav.five-tabs button small { font-size: .55rem; }
   .bottom-nav.five-tabs button:nth-child(4) small { font-size: .5rem; }
 }
+
+
+/* Version 0.2.2 — automatic rolling backups */
+.backup-health {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 18px;
+  background: #fffaf2;
+}
+.backup-health > div { display: grid; gap: 3px; }
+.backup-health small { color: #806d5f; }
+.backup-dot {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  border-radius: 50%;
+  background: #c49a44;
+  box-shadow: 0 0 0 5px #f4e9d3;
+}
+.backup-dot.healthy {
+  background: #2f7045;
+  box-shadow: 0 0 0 5px #e2f0e5;
+}
+.secondary-action {
+  width: 100%;
+  min-height: 49px;
+  border: 1px solid #b98e42;
+  border-radius: 16px;
+  background: #fffaf2;
+  color: #563523;
+  font: inherit;
+  font-weight: 850;
+}
+.empty-backups {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px dashed #d8c6aa;
+  border-radius: 16px;
+  color: #806d5f;
+  text-align: center;
+}
+.snapshot-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.snapshot-row {
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 17px;
+  background: #fffaf2;
+}
+.snapshot-main {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.snapshot-main > div { min-width: 0; display: grid; gap: 4px; }
+.snapshot-main small { color: #806d5f; line-height: 1.35; }
+.snapshot-number {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  border-radius: 50%;
+  background: #efe1c9;
+  color: #573622;
+  font-weight: 900;
+}
+.snapshot-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 7px;
+  margin-top: 12px;
+}
+.snapshot-actions button {
+  min-height: 40px;
+  border: 1px solid #d8c6aa;
+  border-radius: 12px;
+  background: white;
+  color: #573622;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+}
+.snapshot-actions .text-danger { color: #963f34; }
+.text-action {
+  width: 100%;
+  margin-top: 14px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+}
+.danger-text-action { color: #963f34; }

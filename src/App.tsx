@@ -7,6 +7,7 @@ import { AddItem } from './components/AddItem'
 import { SourceCheck } from './components/SourceCheck'
 import { Orders } from './components/Orders'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
+import { saveAutoBackup } from './lib/autoBackup'
 
 const seed: InventoryItem[] = [
   {
@@ -48,6 +49,14 @@ export default function App() {
   useEffect(() => localStorage.setItem('jos-one-react-items', JSON.stringify(items)), [items])
   useEffect(() => localStorage.setItem('jos-one-react-orders', JSON.stringify(orders)), [orders])
   useEffect(() => localStorage.setItem('jos-one-react-settings', JSON.stringify(settings)), [settings])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      saveAutoBackup(items, orders, settings, 'automatic')
+    }, 600)
+
+    return () => window.clearTimeout(timer)
+  }, [items, orders, settings])
 
   const updateItem = (updated: InventoryItem) => {
     setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
@@ -97,7 +106,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.2 STABLE</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.2.2</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
