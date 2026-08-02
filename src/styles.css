@@ -2607,3 +2607,388 @@ h1, h2, h3 {
     justify-content: center;
   }
 }
+
+
+/* ==========================================================
+   JOS One v1.0.0 — CEO Review Centre
+   ========================================================== */
+.ceo-review-centre {
+  display: grid;
+  gap: 17px;
+}
+
+.review-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  border: 1px solid var(--jos-gold-soft, #dec9a9);
+  border-radius: 27px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(205,164,88,.23), transparent 35%),
+    linear-gradient(145deg, #fffaf2, #f3e5d0);
+  box-shadow: var(--jos-shadow, 0 12px 32px rgba(72,42,25,.06));
+}
+.review-hero h2 {
+  margin: 4px 0 8px;
+  font-size: 2rem;
+}
+.review-hero p:last-child {
+  max-width: 34rem;
+  margin: 0;
+  color: #806d5f;
+  line-height: 1.5;
+}
+.review-health {
+  display: grid;
+  place-items: center;
+  min-width: 124px;
+  min-height: 132px;
+  padding: 14px;
+  border: 1px solid #d2b56d;
+  border-radius: 24px;
+  background: #fff8e7;
+  text-align: center;
+}
+.review-health span,
+.review-health small {
+  color: #806d5f;
+  font-size: .68rem;
+  font-weight: 800;
+}
+.review-health strong {
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  line-height: 1;
+}
+.review-health.health-excellent { border-color: #8eb69a; background: #eff8f1; }
+.review-health.health-stable { border-color: #d2b56d; background: #fff8e7; }
+.review-health.health-needs-attention,
+.review-health.health-at-risk { border-color: #d39b91; background: #fff2ef; }
+
+.review-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.review-kpis button {
+  min-height: 112px;
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 18px;
+  background: #fffaf2;
+  color: inherit;
+  text-align: left;
+  box-shadow: 0 7px 18px rgba(72,42,25,.04);
+}
+.review-kpis span,
+.review-kpis small {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+  line-height: 1.3;
+}
+.review-kpis strong {
+  display: block;
+  margin: 8px 0 5px;
+  font-family: Georgia, serif;
+  font-size: 1.38rem;
+}
+
+.review-recommendation {
+  padding: 22px;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #61402b, #402619);
+  color: white;
+  box-shadow: 0 18px 42px rgba(55,31,18,.22);
+}
+.review-recommendation h2 {
+  margin: 5px 0 8px;
+  font-size: 1.85rem;
+}
+.review-recommendation p:not(.eyebrow) {
+  color: #e5d6ca;
+  line-height: 1.5;
+}
+.review-recommendation button {
+  width: 100%;
+  min-height: 49px;
+  margin-top: 13px;
+  border: 0;
+  border-radius: 15px;
+  background: #bd8e3c;
+  color: white;
+  font: inherit;
+  font-weight: 900;
+}
+
+.review-priority-list {
+  display: grid;
+  gap: 8px;
+}
+.review-priority {
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  gap: 11px;
+  align-items: center;
+  width: 100%;
+  min-height: 68px;
+  padding: 11px;
+  border: 1px solid #dec9a9;
+  border-radius: 16px;
+  background: #fffaf2;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.review-priority.priority-urgent { border-left: 5px solid #a84a3b; }
+.review-priority.priority-warning { border-left: 5px solid #d19b2e; }
+.review-priority.priority-normal { border-left: 5px solid #4a9365; }
+.review-priority-number {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background: #efe1c9;
+  color: #573622;
+  font-weight: 900;
+}
+.review-priority-copy strong,
+.review-priority-copy small {
+  display: block;
+}
+.review-priority-copy small {
+  margin-top: 3px;
+  color: #806d5f;
+  font-size: .69rem;
+  line-height: 1.35;
+}
+.review-priority-value {
+  max-width: 92px;
+  color: #8b6428;
+  font-size: .7rem;
+  font-weight: 850;
+  text-align: right;
+}
+.review-empty { color: #806d5f; }
+
+.review-health-grid,
+.review-workflow-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.review-health-grid > div {
+  padding: 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 15px;
+  background: #f8f0e4;
+}
+.review-health-grid span,
+.review-health-grid small {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+}
+.review-health-grid strong {
+  display: block;
+  margin: 5px 0;
+  font-size: 1.25rem;
+}
+.review-health-grid progress {
+  width: 100%;
+  height: 8px;
+  margin-bottom: 5px;
+  accent-color: #8b6428;
+}
+
+.review-workflow-grid button {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 15px;
+  background: #fffaf2;
+  color: inherit;
+  text-align: left;
+}
+.review-workflow-grid span {
+  display: block;
+  color: #806d5f;
+  font-size: .69rem;
+}
+.review-workflow-grid strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 1.4rem;
+}
+
+.review-week-grid,
+.review-backup-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+.review-week-grid > div,
+.review-backup-grid > div {
+  padding: 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 15px;
+  background: #f8f0e4;
+}
+.review-week-grid span,
+.review-backup-grid span {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+}
+.review-week-grid strong,
+.review-backup-grid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1rem;
+}
+
+.review-brand-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.review-brand-grid > div {
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 16px;
+  background: #f8f0e4;
+}
+.review-brand-grid span,
+.review-brand-grid small {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+  line-height: 1.4;
+}
+.review-brand-grid strong {
+  display: block;
+  margin: 6px 0;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+}
+
+.review-checklist-list {
+  display: grid;
+  gap: 8px;
+}
+.review-checklist-list > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  min-height: 57px;
+  padding: 10px 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 14px;
+  background: #fffaf2;
+}
+.review-checklist-list > div.complete {
+  border-color: #98baa2;
+  background: #eff8f1;
+}
+.review-checkmark {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #efe1c9;
+  color: #573622;
+  font-weight: 900;
+}
+.review-checklist-list > div.complete .review-checkmark {
+  background: #cfe7d4;
+  color: #2f7045;
+}
+.review-checklist-list strong,
+.review-checklist-list small {
+  display: block;
+}
+.review-checklist-list small {
+  margin-top: 3px;
+  color: #806d5f;
+  font-size: .69rem;
+}
+
+.review-quick-actions {
+  padding: 20px;
+  border: 1px solid #dec9a9;
+  border-radius: 22px;
+  background: #fffaf2;
+}
+.review-quick-actions h2 {
+  margin: 4px 0 13px;
+  font-size: 1.45rem;
+}
+.review-quick-actions > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.review-quick-actions button {
+  min-height: 52px;
+  border: 1px solid #d8c19a;
+  border-radius: 15px;
+  background: #f8eedc;
+  color: #573622;
+  font: inherit;
+  font-weight: 850;
+}
+
+.review-data-truth {
+  padding: 17px;
+  border: 1px dashed #cdb590;
+  border-radius: 18px;
+  background: #f9f1e5;
+}
+.review-data-truth p:not(.eyebrow) {
+  margin: 8px 0 0;
+  color: #806d5f;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 430px) {
+  .review-hero {
+    grid-template-columns: 1fr;
+  }
+  .review-health {
+    grid-template-columns: auto auto 1fr;
+    min-width: 100%;
+    min-height: auto;
+    justify-content: start;
+    gap: 8px;
+    text-align: left;
+  }
+  .review-health strong { font-size: 2.35rem; }
+  .review-health small { align-self: end; padding-bottom: 5px; }
+
+  .review-week-grid,
+  .review-backup-grid,
+  .review-brand-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-priority {
+    grid-template-columns: auto 1fr;
+  }
+  .review-priority-value {
+    grid-column: 2;
+    max-width: none;
+    text-align: left;
+  }
+}
+
+@media (min-width: 700px) {
+  .review-kpis { grid-template-columns: repeat(3, 1fr); }
+  .review-health-grid { grid-template-columns: repeat(3, 1fr); }
+  .review-workflow-grid { grid-template-columns: repeat(6, 1fr); }
+}

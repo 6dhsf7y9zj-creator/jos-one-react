@@ -10,6 +10,7 @@ import { FinanceCommandCentre } from './components/FinanceCommandCentre'
 import { BusinessIntelligence } from './components/BusinessIntelligence'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline'
 import { OperationsCommandCentre } from './components/OperationsCommandCentre'
+import { CeoReviewCentre } from './components/CeoReviewCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -39,7 +40,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'inventory' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -114,6 +115,7 @@ export default function App() {
 
   const titles: Record<Tab, string> = {
     home: 'Mission Control',
+    review: 'CEO Review Centre',
     inventory: 'Inventory Command Centre',
     add: 'Add Stock Item',
     sourcecheck: 'SourceCheck',
@@ -131,7 +133,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 0.9.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 1.0.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -152,6 +154,14 @@ export default function App() {
           >
             <span className="module-nav-icon">⌂</span>
             <span>Dashboard</span>
+          </button>
+          <button
+            type="button"
+            className={tab === 'review' ? 'active' : ''}
+            onClick={() => changeTab('review')}
+          >
+            <span className="module-nav-icon">◎</span>
+            <span>CEO Review</span>
           </button>
           <button
             type="button"
