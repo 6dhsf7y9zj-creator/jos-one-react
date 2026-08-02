@@ -9,7 +9,7 @@ import { calculateCeoDashboard } from './dashboard'
 import { calculateFinanceSummary, normaliseFinanceState } from './finance'
 import { calculateOperations } from './operations'
 import { inferPipelineStage, pipelineBottleneck, pipelineReadiness } from './pipeline'
-import { buildBusinessIntelligence } from './intelligence'
+import { calculateBusinessIntelligence } from './intelligence'
 import { expectedProfit, itemRoi } from './inventory'
 import { estimateAllSnapshotBytes, getAutoBackups } from './autoBackup'
 
@@ -116,7 +116,7 @@ export function buildCeoReview(
   const ceo = calculateCeoDashboard(items, orders, new Date('2027-01-01T00:00:00'), now)
   const financeSummary = calculateFinanceSummary(finance, items, now)
   const operations = calculateOperations(items, orders, now)
-  const intelligence = buildBusinessIntelligence(items, finance, now)
+  const intelligence = calculateBusinessIntelligence(items, finance, now)
   const active = items.filter(item => !['Sold', 'Dispatched', 'Archived'].includes(item.status))
   const weekTransactions = recentTransactions(finance, now)
   const weeklySales = weekTransactions
@@ -287,7 +287,7 @@ export function buildCeoReview(
       missingMeasurements * 1.5 -
       items.filter(item => item.status === 'Sold' && typeof item.actualSalePrice !== 'number').length * 5,
   )
-  const intelligenceScore = clamp(intelligence.dataQualityScore)
+  const intelligenceScore = clamp(intelligence.dataQuality.score)
   const overall = clamp(
     ceo.businessHealth * .28 +
       financeScore * .20 +
