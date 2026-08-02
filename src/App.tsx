@@ -133,7 +133,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 1.0.1</p>
+            <p className="eyebrow">JOS ONE · VERSION 1.0.3</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -213,6 +213,22 @@ export default function App() {
           </button>
         </nav>
       </header>
+
+      {tab === 'review' && (
+        <CeoReviewCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onOpenInventory={openInventory}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenFinance={() => changeTab('finance')}
+          onOpenIntelligence={() => changeTab('intelligence')}
+          onOpenBackup={() => changeTab('backup')}
+          onOpenAdd={() => changeTab('add')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+        />
+      )}
 
       {tab === 'home' && (
         <Dashboard
