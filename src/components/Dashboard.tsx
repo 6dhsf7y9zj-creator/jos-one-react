@@ -1,6 +1,8 @@
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from '../types/inventory'
 import { calculateCeoDashboard, formatCeoMoney, type CeoMission } from '../lib/dashboard'
-import { JosButton, KpiCard, SectionHeader } from '../ui'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+import { calculateExecutiveKpis } from '../lib/executiveKpis'
+import { formatFinanceMoney } from '../lib/finance'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -41,6 +43,7 @@ export function Dashboard({
   onOpenFinance,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
+  const executive = calculateExecutiveKpis(items, orders, settings.finance)
   const firstMission = metrics.missions[0]
   const topBrands = metrics.brands.slice(0, 4)
   const workflow = [
@@ -129,48 +132,85 @@ export function Dashboard({
 
       <section aria-labelledby="ceo-position">
         <SectionHeader
-          eyebrow="FINANCIAL POSITION"
-          title="What current records support"
+          eyebrow="EXECUTIVE KPI ENGINE"
+          title="Forecasts, realised results and usable cash"
+          description="One calculation layer now supplies the CEO view without mixing expected performance with money already earned."
           action={
-            <JosButton variant="ghost" onClick={() => onOpenInventory()}>
-              Open stock
+            <JosButton variant="ghost" onClick={onOpenFinance}>
+              Open Finance
             </JosButton>
           }
         />
 
-        <div className="jos-kpi-grid">
+        <NoticeCard
+          title={`${executive.confidence[0].toUpperCase()}${executive.confidence.slice(1)} decision confidence`}
+          tone={executive.confidence === 'established' ? 'positive' : executive.confidence === 'developing' ? 'warning' : 'information'}
+        >
+          {executive.confidenceReason}
+        </NoticeCard>
+
+        <div className="jos-kpi-grid executive-kpi-grid">
           <KpiCard
-            label="Cash tied in active stock"
-            value={formatCeoMoney(metrics.inventoryCost)}
-            detail={`${metrics.activeItems} active items`}
-            onClick={() => onOpenInventory()}
-          />
-          <KpiCard
-            label="Expected sales value"
-            value={formatCeoMoney(metrics.expectedSales)}
-            detail="Forecast, not guaranteed revenue"
+            label="Inventory cost"
+            value={formatFinanceMoney(executive.inventoryCost)}
+            detail={`${executive.activeItems} active items`}
             tone="information"
             onClick={() => onOpenInventory()}
           />
           <KpiCard
-            label="Expected gross profit"
-            value={formatCeoMoney(metrics.expectedProfit)}
-            detail="Before tax and unrecorded costs"
+            label="Forecast revenue"
+            value={formatFinanceMoney(executive.forecastRevenue)}
+            detail="Expected—not realised"
+            tone="information"
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Forecast gross profit"
+            value={formatFinanceMoney(executive.forecastGrossProfit)}
+            detail={`${executive.averageForecastRoi.toFixed(0)}% average forecast ROI`}
             tone="positive"
             onClick={() => onOpenInventory()}
           />
           <KpiCard
-            label="Realised profit recorded"
-            value={formatCeoMoney(metrics.realisedProfit)}
-            detail={`${formatCeoMoney(metrics.realisedRevenue)} sale revenue entered`}
-            tone={metrics.realisedProfit >= 0 ? 'positive' : 'urgent'}
+            label="Realised operating profit"
+            value={formatFinanceMoney(executive.realisedOperatingProfit)}
+            detail={`${formatFinanceMoney(executive.realisedRevenue)} recorded sales`}
+            tone={executive.realisedOperatingProfit >= 0 ? 'positive' : 'urgent'}
             onClick={onOpenFinance}
+          />
+          <KpiCard
+            label="Cash available to reinvest"
+            value={formatFinanceMoney(executive.cashAvailableToReinvest)}
+            detail={`${formatFinanceMoney(executive.cashBalance)} recorded cash balance`}
+            tone={executive.cashAvailableToReinvest > 0 ? 'positive' : 'warning'}
+            onClick={onOpenFinance}
+          />
+          <KpiCard
+            label="Sell-through rate"
+            value={`${executive.sellThroughRate.toFixed(0)}%`}
+            detail={`${executive.completedSales} completed sales evidence`}
+            tone={executive.completedSales > 0 ? 'positive' : 'information'}
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Average days to sell"
+            value={executive.averageDaysToSell === undefined ? 'Not enough data' : `${executive.averageDaysToSell.toFixed(0)} days`}
+            detail={executive.averageDaysToSell === undefined ? 'Completed sale and start dates required' : 'Based only on dated completed stock'}
+            tone={executive.averageDaysToSell === undefined ? 'information' : executive.averageDaysToSell <= 30 ? 'positive' : 'warning'}
+            onClick={() => onOpenInventory()}
+          />
+          <KpiCard
+            label="Inventory health"
+            value={`${executive.inventoryHealth}/100`}
+            detail={`${executive.inventoryHealthLabel} · Data quality ${executive.dataQuality}/100`}
+            tone={executive.inventoryHealth >= 70 ? 'positive' : executive.inventoryHealth >= 50 ? 'warning' : 'urgent'}
+            onClick={() => onOpenInventory()}
           />
         </div>
 
         <p className="ceo-data-truth">
-          JOS cannot calculate “cash available to reinvest” until bank cash, sourcing budget
-          and completed-sale receipts are recorded. It shows cash tied in stock instead.
+          Cash available comes from the Finance ledger, emergency reserve and planned sourcing budget.
+          When those records are incomplete, the confidence warning above remains limited.
         </p>
       </section>
 

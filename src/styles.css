@@ -3807,3 +3807,21 @@ button.jos-kpi-card { width: 100%; }
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+
+/* ==========================================================
+   JOS One v2.3.0 — Executive KPI Engine
+   ========================================================== */
+.executive-kpi-grid {
+  margin-top: var(--jos-space-3);
+}
+
+.executive-kpi-grid .jos-kpi-card {
+  min-height: 126px;
+}
+
+@media (min-width: 700px) {
+  .executive-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
