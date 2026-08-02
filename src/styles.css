@@ -1160,3 +1160,413 @@ h1, h2, h3 {
   .inventory-editor-overlay { align-items: center; }
   .inventory-editor { width: min(680px, 100%); margin: auto; }
 }
+
+
+/* JOS One v0.4.0 — CEO Dashboard */
+.ceo-dashboard {
+  display: grid;
+  gap: 18px;
+}
+.ceo-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 23px;
+  border: 1px solid #dec9a9;
+  border-radius: 27px;
+  background:
+    radial-gradient(circle at 88% 15%, rgba(205, 164, 88, .23), transparent 35%),
+    linear-gradient(145deg, #fffaf2, #f3e5d0);
+  box-shadow: 0 14px 36px rgba(72, 42, 25, .07);
+}
+.ceo-hero h2 {
+  font-size: clamp(2rem, 8vw, 2.8rem);
+}
+.ceo-hero-copy > p:not(.eyebrow) {
+  max-width: 34rem;
+  margin: 9px 0 0;
+  color: #806d5f;
+  line-height: 1.5;
+}
+.launch-countdown {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 15px;
+  padding: 9px 12px;
+  border: 1px solid #d5bc8e;
+  border-radius: 999px;
+  background: rgba(255, 250, 242, .8);
+}
+.launch-countdown strong {
+  color: #8b6428;
+  font-size: 1.1rem;
+}
+.launch-countdown span {
+  color: #6f594a;
+  font-size: .74rem;
+  font-weight: 750;
+}
+.ceo-health {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  min-height: 126px;
+  padding: 13px;
+  border: 1px solid #bca477;
+  border-radius: 25px;
+  background: rgba(255,250,242,.86);
+  text-align: center;
+}
+.ceo-health > span {
+  color: #806d5f;
+  font-size: .68rem;
+  font-weight: 800;
+}
+.ceo-health > strong {
+  font-family: Georgia, serif;
+  font-size: 3.2rem;
+  line-height: .95;
+}
+.ceo-health > small {
+  color: #806d5f;
+  font-size: .68rem;
+  font-weight: 800;
+}
+.ceo-health.health-strong { border-color: #8eb69a; background: #eff8f1; }
+.ceo-health.health-stable { border-color: #d2b56d; background: #fff7e7; }
+.ceo-health.health-needs-attention,
+.ceo-health.health-at-risk { border-color: #cf8e82; background: #fff1ee; }
+
+.ceo-health-reasons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.health-reason {
+  padding: 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 15px;
+  background: #fffaf2;
+}
+.health-reason span {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+}
+.health-reason strong {
+  display: block;
+  margin-top: 5px;
+  font-size: .94rem;
+}
+.reason-good { border-left: 4px solid #4a9365; }
+.reason-warning { border-left: 4px solid #d6a13b; }
+.reason-urgent { border-left: 4px solid #b85742; }
+
+.ceo-mission-card {
+  padding: 23px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #61402b, #402619);
+  color: white;
+  box-shadow: 0 18px 42px rgba(55, 31, 18, .22);
+}
+.mission-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+.mission-card-heading h2 {
+  font-size: 1.85rem;
+}
+.mission-time {
+  min-width: 65px;
+  text-align: right;
+}
+.mission-time strong {
+  display: block;
+  color: #efcd82;
+  font-family: Georgia, serif;
+  font-size: 2rem;
+}
+.mission-time span {
+  color: #ddcec2;
+  font-size: .72rem;
+}
+.ceo-mission-list {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+}
+.ceo-mission-list button {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  color: white;
+  font: inherit;
+  text-align: left;
+}
+.ceo-mission-list button.primary-mission {
+  border-color: #d6a95b;
+  background: rgba(214,169,91,.14);
+}
+.mission-number {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background: #bd8e3c;
+  font-weight: 900;
+}
+.mission-copy {
+  min-width: 0;
+}
+.mission-copy strong,
+.mission-copy small {
+  display: block;
+}
+.mission-copy small {
+  margin-top: 3px;
+  color: #dfd0c4;
+  font-size: .7rem;
+  line-height: 1.35;
+}
+.mission-minutes {
+  color: #efcd82;
+  font-size: .76rem;
+  font-weight: 850;
+}
+.mission-outcome {
+  display: grid;
+  gap: 4px;
+  padding: 13px 0;
+  border-top: 1px solid rgba(255,255,255,.16);
+}
+.mission-outcome span {
+  color: #ddcec2;
+  font-size: .7rem;
+}
+.mission-outcome strong {
+  color: #f3dfb4;
+  font-size: .8rem;
+  line-height: 1.4;
+}
+.start-ceo-work {
+  width: 100%;
+  min-height: 51px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 16px;
+  background: #bd8e3c;
+  color: white;
+  font: inherit;
+  font-weight: 900;
+}
+
+.ceo-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.ceo-kpis button {
+  min-height: 116px;
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 18px;
+  background: #fffaf2;
+  color: inherit;
+  text-align: left;
+}
+.ceo-kpis span,
+.ceo-kpis small {
+  display: block;
+  color: #806d5f;
+  font-size: .68rem;
+  line-height: 1.3;
+}
+.ceo-kpis strong {
+  display: block;
+  margin: 8px 0 5px;
+  font-family: Georgia, serif;
+  font-size: 1.43rem;
+}
+.ceo-data-truth {
+  margin: 11px 2px 0;
+  color: #806d5f;
+  font-size: .72rem;
+  line-height: 1.5;
+}
+
+.ceo-workflow-panel,
+.ceo-brands-panel,
+.ceo-alerts-panel {
+  margin-bottom: 0;
+}
+.workflow-funnel {
+  display: grid;
+  gap: 11px;
+}
+.workflow-funnel button {
+  display: grid;
+  grid-template-columns: 83px 1fr 30px;
+  gap: 9px;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.workflow-label {
+  color: #6f594a;
+  font-size: .76rem;
+  font-weight: 800;
+}
+.workflow-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eee2cf;
+}
+.workflow-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #bd8e3c, #795037);
+}
+.workflow-funnel strong {
+  text-align: right;
+}
+.brand-ranking {
+  display: grid;
+}
+.brand-ranking button {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 62px;
+  border: 0;
+  border-top: 1px solid #eadcc7;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.brand-ranking button:first-child { border-top: 0; }
+.brand-rank {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #efe1c9;
+  color: #573622;
+  font-weight: 900;
+}
+.brand-name strong,
+.brand-name small {
+  display: block;
+}
+.brand-name small {
+  margin-top: 3px;
+  color: #806d5f;
+  font-size: .7rem;
+}
+.brand-profit {
+  color: #2f7045;
+  font-weight: 900;
+}
+.ceo-empty {
+  color: #806d5f;
+}
+
+.ceo-alert-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  align-items: center;
+  width: 100%;
+  min-height: 59px;
+  padding: 10px 2px;
+  border: 0;
+  border-top: 1px solid #eadcc7;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.ceo-alert-row:first-of-type { border-top: 0; }
+.ceo-alert-row span:nth-child(2) strong,
+.ceo-alert-row span:nth-child(2) small {
+  display: block;
+}
+.ceo-alert-row span:nth-child(2) small {
+  margin-top: 3px;
+  color: #806d5f;
+  font-size: .72rem;
+}
+.ceo-alert-row b {
+  color: #a87b2c;
+  font-size: 1.4rem;
+}
+
+.ceo-quick-actions {
+  padding: 21px;
+  border: 1px solid #dec9a9;
+  border-radius: 23px;
+  background: #fffaf2;
+}
+.ceo-quick-actions h2 {
+  font-size: 1.45rem;
+  margin-bottom: 13px;
+}
+.ceo-quick-actions > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.ceo-quick-actions button {
+  min-height: 54px;
+  border: 1px solid #d8c19a;
+  border-radius: 15px;
+  background: #f8eedc;
+  color: #573622;
+  font: inherit;
+  font-weight: 850;
+}
+.ceo-targets {
+  margin: 13px 0 0;
+  color: #806d5f;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 430px) {
+  .ceo-hero {
+    grid-template-columns: 1fr;
+  }
+  .ceo-health {
+    grid-template-columns: auto auto 1fr;
+    width: 100%;
+    min-height: auto;
+    justify-content: start;
+    gap: 8px;
+    text-align: left;
+  }
+  .ceo-health > strong { font-size: 2.35rem; }
+  .ceo-health > small { align-self: end; padding-bottom: 5px; }
+}
+@media (min-width: 700px) {
+  .ceo-health-reasons { grid-template-columns: repeat(4, 1fr); }
+  .ceo-kpis { grid-template-columns: repeat(4, 1fr); }
+}

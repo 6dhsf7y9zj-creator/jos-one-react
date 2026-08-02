@@ -115,7 +115,7 @@ export default function App() {
       <header className="app-bar">
         <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
         <div className="app-title">
-          <p className="eyebrow">JOS ONE · VERSION 0.3.0</p>
+          <p className="eyebrow">JOS ONE · VERSION 0.4.0</p>
           <h1>{titles[tab]}</h1>
           <p className="header-date">
             {new Date().toLocaleDateString('en-GB', {
@@ -136,7 +136,17 @@ export default function App() {
         </button>
       </header>
 
-      {tab === 'home' && <Dashboard items={items} onOpenInventory={openInventory} />}
+      {tab === 'home' && (
+        <Dashboard
+          items={items}
+          orders={orders}
+          settings={settings}
+          onOpenInventory={openInventory}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenAdd={() => changeTab('add')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+        />
+      )}
       {tab === 'inventory' && (
         <Inventory
           items={items}
