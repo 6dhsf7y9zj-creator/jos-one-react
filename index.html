@@ -18,6 +18,12 @@
   <h1>JOS One static test</h1>
   <p>GitHub Pages is serving the correct HTML.</p>
 </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script>
+  document.getElementById('root').insertAdjacentHTML(
+    'beforeend',
+    '<p style="margin-top:20px">JavaScript is running.</p>'
+  )
+</script>
+<script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
