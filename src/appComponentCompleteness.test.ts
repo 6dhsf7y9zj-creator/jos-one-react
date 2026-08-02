@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import addItemSource from './components/AddItem.tsx?raw'
 import backupSource from './components/BackupCenter.tsx?raw'
 import brandSource from './components/BrandPerformanceCentre.tsx?raw'
+import forecastSource from './components/BusinessForecastingCentre.tsx?raw'
 import intelligenceSource from './components/BusinessIntelligence.tsx?raw'
 import recommendationSource from './components/CeoRecommendationCentre.tsx?raw'
 import reviewSource from './components/CeoReviewCentre.tsx?raw'
@@ -19,6 +20,7 @@ describe('App component completeness', () => {
     expect(addItemSource).toContain('export function AddItem')
     expect(backupSource).toContain('export function BackupCenter')
     expect(brandSource).toContain('export function BrandPerformanceCentre')
+    expect(forecastSource).toContain('export function BusinessForecastingCentre')
     expect(intelligenceSource).toContain('export function BusinessIntelligence')
     expect(recommendationSource).toContain('export function CeoRecommendationCentre')
     expect(reviewSource).toContain('export function CeoReviewCentre')

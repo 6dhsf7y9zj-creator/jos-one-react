@@ -5,6 +5,7 @@ import { calculateExecutiveKpis } from '../lib/executiveKpis'
 import { formatFinanceMoney } from '../lib/finance'
 import { calculateBrandPerformance } from '../lib/brandPerformance'
 import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
+import { calculateBusinessForecast } from '../lib/businessForecasting'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -17,6 +18,7 @@ type DashboardProps = {
   onOpenFinance: () => void
   onOpenBrandPerformance: () => void
   onOpenRecommendations: () => void
+  onOpenForecasting: () => void
 }
 
 function greeting(): string {
@@ -47,6 +49,7 @@ export function Dashboard({
   onOpenFinance,
   onOpenBrandPerformance,
   onOpenRecommendations,
+  onOpenForecasting,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
@@ -60,6 +63,16 @@ export function Dashboard({
     },
   )
   const recommendations = calculateCeoRecommendations(items, orders, settings)
+  const forecast = calculateBusinessForecast(
+    items,
+    orders,
+    settings,
+    {
+      scenario: 'base',
+      horizonWeeks: 12,
+      monthlyProfitTarget: settings.monthlyProfitTarget ?? 5000,
+    },
+  )
   const topBrands = brandPerformance.brands.slice(0, 4)
   const workflow = [
     { label: 'Prep', count: metrics.prepItems, status: 'Prep' as StockStatus },
@@ -118,6 +131,25 @@ export function Dashboard({
         </div>
         <JosButton variant="primary" fullWidth onClick={onOpenRecommendations}>
           Open ranked decision plan
+        </JosButton>
+      </section>
+
+      <section className="ceo-forecast-summary">
+        <div>
+          <p className="eyebrow">BUSINESS FORECASTING</p>
+          <h2>{formatFinanceMoney(forecast.summary.rolling30DayProfit)}</h2>
+          <p>
+            Rolling 30-day operating-profit forecast · {forecast.summary.targetProgress}% of
+            {` ${formatFinanceMoney(forecast.monthlyProfitTarget)} target`}
+          </p>
+        </div>
+        <div className="ceo-forecast-metrics">
+          <span><strong>{formatFinanceMoney(forecast.summary.projectedEndCash)}</strong>12-week closing cash</span>
+          <span><strong>{formatFinanceMoney(forecast.summary.monthlyTargetGap)}</strong>target gap</span>
+          <span><strong>{forecast.confidenceScore}/100</strong>confidence</span>
+        </div>
+        <JosButton variant="secondary" fullWidth onClick={onOpenForecasting}>
+          Open forecasting engine
         </JosButton>
       </section>
 

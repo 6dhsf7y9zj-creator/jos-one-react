@@ -19,6 +19,7 @@ type FinanceProps = {
   items: InventoryItem[]
   finance?: FinanceState
   onChange: (finance: FinanceState) => void
+  onOpenForecasting: () => void
 }
 
 type LedgerFilter = 'all' | FinanceTransactionType
@@ -72,7 +73,7 @@ function downloadLedger(transactions: FinanceTransaction[]): void {
   URL.revokeObjectURL(url)
 }
 
-export function FinanceCommandCentre({ items, finance, onChange }: FinanceProps) {
+export function FinanceCommandCentre({ items, finance, onChange, onOpenForecasting }: FinanceProps) {
   const state = normaliseFinanceState(finance)
   const summary = useMemo(() => calculateFinanceSummary(state, items), [state, items])
   const [formOpen, setFormOpen] = useState(false)
@@ -208,6 +209,7 @@ export function FinanceCommandCentre({ items, finance, onChange }: FinanceProps)
         <JosButton variant="primary" onClick={() => setFormOpen(true)}>Add transaction</JosButton>
         <JosButton variant="secondary" onClick={() => setSettingsOpen(value => !value)}>Finance settings</JosButton>
         <JosButton variant="secondary" onClick={() => downloadLedger(state.transactions)}>Export ledger CSV</JosButton>
+        <JosButton variant="secondary" onClick={onOpenForecasting}>Open forecast</JosButton>
       </section>
 
       {settingsOpen && (

@@ -4335,3 +4335,525 @@ button.jos-kpi-card { width: 100%; }
   .cr-kpi-grid { grid-template-columns: repeat(3,1fr); }
   .cr-evidence-grid { grid-template-columns: repeat(6,1fr); }
 }
+
+
+/* ==========================================================
+   JOS One v2.5.0 — Business Forecasting Engine
+   ========================================================== */
+.business-forecasting-centre {
+  display: grid;
+  gap: var(--jos-space-4);
+}
+
+.bf-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  border: 1px solid #dec9a9;
+  border-radius: 27px;
+  background:
+    radial-gradient(circle at 89% 12%, rgba(205,164,88,.23), transparent 35%),
+    linear-gradient(145deg, #fffaf2, #f3e5d0);
+  box-shadow: var(--jos-shadow);
+}
+
+.bf-hero h2 {
+  margin: 4px 0 8px;
+  font-size: 2rem;
+}
+
+.bf-hero p:last-child {
+  max-width: 36rem;
+  margin: 0;
+  color: #806d5f;
+  line-height: 1.5;
+}
+
+.bf-confidence {
+  display: grid;
+  place-items: center;
+  min-width: 132px;
+  min-height: 135px;
+  padding: 14px;
+  border: 1px solid #d2b56d;
+  border-radius: 24px;
+  background: #fff8e7;
+  text-align: center;
+}
+
+.bf-confidence span,
+.bf-confidence small {
+  color: #806d5f;
+  font-size: .67rem;
+  font-weight: 800;
+}
+
+.bf-confidence strong {
+  font-family: var(--jos-font-display);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.bf-confidence.confidence-high {
+  border-color: #8eb69a;
+  background: #eff8f1;
+}
+
+.bf-confidence.confidence-low {
+  border-color: #d39b91;
+  background: #fff2ef;
+}
+
+.bf-scenario-switch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.bf-scenario-switch button {
+  min-height: 66px;
+  padding: 10px;
+  border: 1px solid #d8c6aa;
+  border-radius: 16px;
+  background: #fffaf2;
+  color: #573622;
+  font: inherit;
+}
+
+.bf-scenario-switch strong,
+.bf-scenario-switch small {
+  display: block;
+}
+
+.bf-scenario-switch small {
+  margin-top: 4px;
+  color: #806d5f;
+  font-size: .65rem;
+}
+
+.bf-scenario-switch button.active {
+  border-color: #573622;
+  background: #573622;
+  color: white;
+}
+
+.bf-scenario-switch button.active small {
+  color: #eadfd6;
+}
+
+.bf-controls {
+  display: grid;
+  gap: 13px;
+}
+
+.bf-controls > label {
+  display: grid;
+  gap: 6px;
+  color: #806d5f;
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.bf-controls > label > span {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid #d8c6aa;
+  border-radius: 14px;
+  background: white;
+  color: #573622;
+  font-size: 1rem;
+}
+
+.bf-controls input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #573622;
+  font: inherit;
+  font-weight: 850;
+}
+
+.bf-view-tabs {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bf-view-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.bf-view-tabs button {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid #d8c6aa;
+  border-radius: 999px;
+  background: #fffaf2;
+  color: #573622;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 850;
+}
+
+.bf-view-tabs button.active {
+  border-color: #573622;
+  background: #573622;
+  color: white;
+}
+
+.bf-week-list {
+  display: grid;
+  gap: 10px;
+}
+
+.bf-week-list article {
+  padding: 13px;
+  border: 1px solid #dec9a9;
+  border-radius: 17px;
+  background: #fffaf2;
+}
+
+.bf-week-heading,
+.bf-week-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bf-week-heading span {
+  font-weight: 900;
+}
+
+.bf-week-heading small,
+.bf-week-footer {
+  color: #806d5f;
+  font-size: .66rem;
+}
+
+.bf-week-bars {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.bf-week-bars > div {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.bf-week-bars span {
+  color: #806d5f;
+  font-size: .65rem;
+}
+
+.bf-week-bars i {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: #4a9365;
+}
+
+.bf-week-bars .negative i {
+  background: #a84a3b;
+}
+
+.bf-week-bars strong {
+  min-width: 66px;
+  font-size: .7rem;
+  text-align: right;
+}
+
+.bf-week-footer strong {
+  color: #573622;
+}
+
+.bf-cash-controls,
+.bf-target-grid,
+.bf-evidence-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.bf-cash-controls > div,
+.bf-target-grid > div,
+.bf-evidence-grid > div {
+  min-height: 84px;
+  padding: 12px;
+  border: 1px solid #dec9a9;
+  border-radius: 15px;
+  background: #f8f0e4;
+}
+
+.bf-cash-controls span,
+.bf-target-grid span,
+.bf-evidence-grid span {
+  display: block;
+  color: #806d5f;
+  font-size: .67rem;
+}
+
+.bf-cash-controls strong,
+.bf-target-grid strong,
+.bf-evidence-grid strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 1.08rem;
+}
+
+.bf-target-meter {
+  margin: 10px 0 17px;
+}
+
+.bf-target-meter > div {
+  overflow: hidden;
+  height: 14px;
+  border-radius: 999px;
+  background: #eadcc7;
+}
+
+.bf-target-meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b6428, #d1a854);
+}
+
+.bf-target-meter > span,
+.bf-target-meter > strong {
+  display: inline-block;
+  margin-top: 7px;
+  font-size: .7rem;
+}
+
+.bf-target-meter > strong {
+  float: right;
+}
+
+.bf-candidate-list {
+  display: grid;
+}
+
+.bf-candidate-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 61px;
+  padding: 10px 2px;
+  border: 0;
+  border-top: 1px solid #eadcc7;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.bf-candidate-list button:first-child {
+  border-top: 0;
+}
+
+.bf-candidate-list strong,
+.bf-candidate-list small {
+  display: block;
+}
+
+.bf-candidate-list small {
+  margin-top: 3px;
+  color: #806d5f;
+  font-size: .67rem;
+  line-height: 1.35;
+}
+
+.bf-candidate-list em {
+  color: #2f7045;
+  font-size: .72rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.bf-comparison-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.bf-comparison-grid article {
+  padding: 16px;
+  border: 1px solid #dec9a9;
+  border-radius: 18px;
+  background: #fffaf2;
+}
+
+.bf-comparison-grid article.selected {
+  border-color: #8b6428;
+  box-shadow: inset 0 0 0 1px #8b6428;
+}
+
+.bf-comparison-grid h3 {
+  margin: 6px 0 2px;
+  font-size: 1.55rem;
+}
+
+.bf-comparison-grid > article > span {
+  color: #806d5f;
+  font-size: .67rem;
+}
+
+.bf-comparison-grid dl {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0;
+}
+
+.bf-comparison-grid dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #eadcc7;
+  padding-top: 7px;
+}
+
+.bf-comparison-grid dt,
+.bf-comparison-grid dd {
+  margin: 0;
+  font-size: .7rem;
+}
+
+.bf-comparison-grid dt {
+  color: #806d5f;
+}
+
+.bf-comparison-grid dd {
+  font-weight: 850;
+}
+
+.bf-warnings,
+.bf-assumptions {
+  padding: 17px;
+  border: 1px dashed #cdb590;
+  border-radius: 18px;
+  background: #f9f1e5;
+}
+
+.bf-warnings {
+  border-color: #d6a59b;
+  background: #fff4f1;
+}
+
+.bf-warnings p:not(.eyebrow),
+.bf-assumptions p:not(.eyebrow) {
+  margin: 8px 0 0;
+  color: #806d5f;
+  font-size: .71rem;
+  line-height: 1.45;
+}
+
+.ceo-forecast-summary {
+  display: grid;
+  gap: 13px;
+  padding: 18px;
+  border: 1px solid #dec9a9;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(205,164,88,.18), transparent 38%),
+    #fffaf2;
+  box-shadow: var(--jos-shadow);
+}
+
+.ceo-forecast-summary h2 {
+  margin: 4px 0;
+  font-size: 1.65rem;
+}
+
+.ceo-forecast-summary p:not(.eyebrow) {
+  margin: 0;
+  color: #806d5f;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+.ceo-forecast-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+
+.ceo-forecast-metrics span {
+  padding: 9px;
+  border-radius: 12px;
+  background: #f2e6d3;
+  color: #806d5f;
+  font-size: .61rem;
+  text-align: center;
+}
+
+.ceo-forecast-metrics strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #573622;
+  font-size: .85rem;
+}
+
+.finance-actions .jos-button {
+  min-width: 145px;
+}
+
+@media (max-width: 430px) {
+  .bf-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .bf-confidence {
+    grid-template-columns: auto auto 1fr;
+    min-width: 100%;
+    min-height: auto;
+    justify-content: start;
+    gap: 8px;
+    text-align: left;
+  }
+
+  .bf-confidence strong {
+    font-size: 2.35rem;
+  }
+
+  .bf-confidence small {
+    align-self: end;
+    padding-bottom: 5px;
+  }
+
+  .bf-scenario-switch {
+    grid-template-columns: 1fr;
+  }
+
+  .bf-week-footer {
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 700px) {
+  .bf-kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bf-cash-controls,
+  .bf-target-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bf-evidence-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bf-comparison-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

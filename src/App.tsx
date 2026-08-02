@@ -14,6 +14,7 @@ import { CeoReviewCentre } from './components/CeoReviewCentre'
 import { InventoryIntelligenceEngine } from './components/InventoryIntelligenceEngine'
 import { BrandPerformanceCentre } from './components/BrandPerformanceCentre'
 import { CeoRecommendationCentre } from './components/CeoRecommendationCentre'
+import { BusinessForecastingCentre } from './components/BusinessForecastingCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 
@@ -34,6 +35,7 @@ const defaultSettings: JosSettings = {
   minimumProfit: 15,
   targetRoi: 150,
   storageLocations: ['Box A1', 'Box A2', 'Box B1', 'Rail 1', 'Shelf 1'],
+  monthlyProfitTarget: 5000,
   finance: {
     openingCash: 0,
     emergencyReserve: 0,
@@ -43,7 +45,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'recommendations' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -129,6 +131,7 @@ export default function App() {
     home: 'Mission Control',
     review: 'CEO Review Centre',
     recommendations: 'CEO Recommendation Engine',
+    forecasting: 'Business Forecasting Engine',
     inventory: 'Inventory Command Centre',
     'inventory-intelligence': 'Inventory Intelligence Engine',
     'brand-performance': 'Brand Performance Centre',
@@ -148,7 +151,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.4.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.5.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -191,6 +194,7 @@ export default function App() {
           onOpenFinance={() => changeTab('finance')}
           onOpenBrandPerformance={() => changeTab('brand-performance')}
           onOpenRecommendations={() => changeTab('recommendations')}
+          onOpenForecasting={() => changeTab('forecasting')}
         />
       )}
       {tab === 'recommendations' && (
@@ -206,6 +210,20 @@ export default function App() {
           onOpenInventoryIntelligence={() => changeTab('inventory-intelligence')}
           onOpenSourceCheck={() => changeTab('sourcecheck')}
           onOpenOperations={() => changeTab('operations')}
+        />
+      )}
+      {tab === 'forecasting' && (
+        <BusinessForecastingCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onChangeTarget={monthlyProfitTarget =>
+            setSettings(current => ({ ...current, monthlyProfitTarget }))
+          }
+          onOpenFinance={() => changeTab('finance')}
+          onOpenInventory={() => openInventory()}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenRecommendations={() => changeTab('recommendations')}
         />
       )}
       {tab === 'inventory' && (
@@ -275,6 +293,7 @@ export default function App() {
           items={items}
           finance={settings.finance}
           onChange={finance => setSettings(current => ({ ...current, finance }))}
+          onOpenForecasting={() => changeTab('forecasting')}
         />
       )}
       {tab === 'intelligence' && (
@@ -355,6 +374,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('recommendations')}>
                 <span>⚡</span><strong>CEO Recommendations</strong><small>Ranked daily actions and sourcing control</small>
+              </button>
+              <button type="button" onClick={() => changeTab('forecasting')}>
+                <span>↗</span><strong>Business Forecasting</strong><small>Cash, profit, reserves and target outlook</small>
               </button>
 
               <button type="button" onClick={() => changeTab('inventory-intelligence')}>

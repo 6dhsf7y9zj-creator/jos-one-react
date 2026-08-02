@@ -128,5 +128,6 @@ export interface JosSettings {
   minimumProfit: number;
   targetRoi: number;
   storageLocations: string[];
+  monthlyProfitTarget?: number;
   finance?: FinanceState;
 }
