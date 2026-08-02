@@ -2996,3 +2996,262 @@ h1, h2, h3 {
 
 /* JOS One v1.1.0 — Customer & Orders Command Centre */
 .customer-orders-centre{display:grid;gap:16px}.orders-command-hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:22px;border:1px solid #dec9a9;border-radius:27px;background:linear-gradient(145deg,#fffaf2,#f3e5d0)}.orders-command-hero h2{margin:4px 0 8px;font-size:2rem}.orders-command-hero p:last-child{margin:0;color:#806d5f;line-height:1.5}.orders-command-hero button{min-height:48px;padding:0 18px;border:0;border-radius:15px;background:#573622;color:#fff;font:inherit;font-weight:900}.orders-command-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.orders-command-kpis>div{padding:14px;border:1px solid #dec9a9;border-radius:18px;background:#fffaf2}.orders-command-kpis span{display:block;color:#806d5f;font-size:.7rem}.orders-command-kpis strong{display:block;margin-top:7px;font-size:1.35rem}.orders-command-controls{display:grid;gap:10px}.orders-command-controls>div{display:flex;gap:8px;overflow:auto}.orders-command-controls button{min-height:40px;padding:0 14px;border:1px solid #d8c6aa;border-radius:999px;background:#fff;color:#573622;font:inherit;font-weight:800;white-space:nowrap}.orders-command-controls button.active{background:#573622;color:#fff}.orders-command-list,.orders-customer-list{display:grid;gap:12px}.order-command-card{overflow:hidden;border:1px solid #dec9a9;border-radius:20px;background:#fffaf2}.order-command-heading{display:flex;justify-content:space-between;gap:12px;padding:16px}.order-command-heading h3{margin:3px 0;font-family:Georgia,serif;font-size:1.3rem}.order-command-heading p:last-child{margin:0;color:#806d5f;font-size:.75rem}.order-command-heading>span{height:max-content;padding:7px 10px;border-radius:999px;background:#efe1c9;font-size:.7rem;font-weight:850}.order-command-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#eadcc7}.order-command-facts>div{padding:12px;background:#f8f0e4}.order-command-facts span,.order-command-facts strong{display:block}.order-command-facts span{color:#806d5f;font-size:.65rem}.order-command-facts strong{margin-top:5px;font-size:.78rem;overflow-wrap:anywhere}.order-command-actions{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#eadcc7}.order-command-actions button{min-height:48px;border:0;background:#fffaf2;color:#573622;font:inherit;font-weight:850}.order-command-actions .primary{background:#573622;color:#fff}.customer-summary{display:grid;grid-template-columns:1fr auto;gap:14px}.customer-summary h3{margin:3px 0}.customer-summary p:last-child{margin:0;color:#806d5f}.customer-summary dl{display:grid;gap:6px;margin:0}.customer-summary dl div{display:grid;grid-template-columns:auto auto;gap:8px}.customer-summary dt{color:#806d5f;font-size:.7rem}.customer-summary dd{margin:0;font-weight:800;font-size:.75rem}.order-editor-overlay{position:fixed;z-index:90;inset:0;display:grid;align-items:end;padding:12px;background:rgba(38,22,14,.64);backdrop-filter:blur(5px)}.order-editor{max-height:calc(100dvh - 24px);overflow:auto;padding:20px;border-radius:26px;background:#f8f0e4}.order-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.order-form-grid label{display:grid;gap:5px;color:#806d5f;font-size:.7rem;font-weight:800}.order-form-grid input,.order-form-grid select,.order-form-grid textarea{width:100%;min-height:42px;padding:8px;border:1px solid #d8c6aa;border-radius:11px;background:#fff;font:inherit}.order-form-grid textarea{min-height:80px}.order-form-grid .wide{grid-column:1/-1}@media(max-width:430px){.orders-command-hero{grid-template-columns:1fr}.orders-command-hero button{width:100%}.order-command-heading{display:grid}.order-command-facts{grid-template-columns:1fr 1fr}.order-command-facts>div:last-child{grid-column:1/-1}.order-form-grid{grid-template-columns:1fr}.order-form-grid .wide{grid-column:auto}.customer-summary{grid-template-columns:1fr}}@media(min-width:700px){.orders-command-kpis{grid-template-columns:repeat(6,1fr)}.order-editor{width:min(720px,100%);margin:auto}.order-editor-overlay{align-items:center}}
+
+
+/* ==========================================================
+   JOS One v1.2.0 — Mobile Navigation Redesign
+   ========================================================== */
+
+/* The title area is now the only content in the sticky header. */
+.jos-universal-header {
+  padding-bottom: 0;
+}
+
+.jos-header-identity {
+  padding-bottom: 15px;
+}
+
+/* Historical horizontal module navigation is no longer used. */
+.jos-module-nav {
+  display: none !important;
+}
+
+/* Four core business destinations plus one expandable module launcher. */
+.bottom-nav.jos-primary-nav {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  height: calc(78px + env(safe-area-inset-bottom));
+  padding:
+    8px
+    max(7px, env(safe-area-inset-right))
+    calc(8px + env(safe-area-inset-bottom))
+    max(7px, env(safe-area-inset-left));
+  border-top: 1px solid #dfcfb5;
+  background: rgba(255, 255, 255, .97);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 -10px 30px rgba(72, 42, 25, .08);
+}
+
+.bottom-nav.jos-primary-nav button {
+  min-width: 0;
+  padding: 4px 2px;
+  color: #8a7769;
+}
+
+.bottom-nav.jos-primary-nav button span {
+  font-size: 1.28rem;
+  line-height: 1;
+}
+
+.bottom-nav.jos-primary-nav button small {
+  margin-top: 5px;
+  font-size: .57rem;
+  white-space: nowrap;
+}
+
+.bottom-nav.jos-primary-nav button.active {
+  color: #3a2418;
+  font-weight: 900;
+}
+
+.bottom-nav.jos-primary-nav button.active span {
+  transform: translateY(-1px);
+}
+
+/* Add Stock stays available without consuming a permanent tab. */
+.jos-quick-add {
+  position: fixed;
+  z-index: 43;
+  right: 18px;
+  bottom: calc(91px + env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: 2px solid #fffaf2;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6a442c, #452718);
+  color: white;
+  box-shadow: 0 13px 28px rgba(61, 34, 20, .28);
+  font: inherit;
+}
+
+.jos-quick-add span {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.jos-quick-add small {
+  position: absolute;
+  width: max-content;
+  right: 1px;
+  bottom: -21px;
+  color: #6f5d50;
+  font-size: .55rem;
+  font-weight: 850;
+}
+
+.jos-quick-add.active {
+  background: #bd8e3c;
+}
+
+/* Module launcher sheet. */
+.jos-module-overlay {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  padding: 14px;
+  background: rgba(42, 24, 15, .56);
+  backdrop-filter: blur(6px);
+  animation: jos-overlay-in .16s ease-out;
+}
+
+.jos-module-panel {
+  width: min(100%, 680px);
+  max-height: min(82dvh, 780px);
+  margin: 0 auto;
+  overflow-y: auto;
+  padding: 8px 18px calc(22px + env(safe-area-inset-bottom));
+  border: 1px solid #d8c6aa;
+  border-radius: 29px 29px 22px 22px;
+  background:
+    radial-gradient(circle at 90% 8%, rgba(205, 164, 88, .18), transparent 31%),
+    #f8f0e4;
+  box-shadow: 0 24px 70px rgba(42, 24, 15, .32);
+  animation: jos-panel-up .21s ease-out;
+}
+
+.jos-module-panel-handle {
+  width: 46px;
+  height: 5px;
+  margin: 3px auto 15px;
+  border-radius: 999px;
+  background: #cab89d;
+}
+
+.jos-module-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.jos-module-panel-header h2 {
+  margin: 4px 0 0;
+  color: #3a2418;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.55rem;
+}
+
+.jos-module-panel-header > button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d8c6aa;
+  border-radius: 50%;
+  background: #fffaf2;
+  color: #573622;
+  font: inherit;
+  font-size: 1.45rem;
+}
+
+.jos-module-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.jos-module-grid button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 3px 10px;
+  align-items: center;
+  min-height: 92px;
+  padding: 14px;
+  border: 1px solid #dec9a9;
+  border-radius: 18px;
+  background: rgba(255, 250, 242, .96);
+  color: #3a2418;
+  font: inherit;
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(72, 42, 25, .04);
+}
+
+.jos-module-grid button > span {
+  grid-row: 1 / 3;
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  background: #efe1c9;
+  color: #573622;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.jos-module-grid strong {
+  font-size: .79rem;
+  line-height: 1.2;
+}
+
+.jos-module-grid small {
+  color: #806d5f;
+  font-size: .62rem;
+  line-height: 1.35;
+}
+
+.jos-module-grid button:active {
+  transform: scale(.985);
+}
+
+@keyframes jos-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes jos-panel-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Make room for the larger persistent navigation and floating action. */
+.app-shell {
+  padding-bottom: calc(112px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 390px) {
+  .jos-module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jos-module-grid button {
+    min-height: 78px;
+  }
+
+  .jos-quick-add {
+    right: 14px;
+    width: 58px;
+    height: 58px;
+  }
+}
+
+@media (min-width: 700px) {
+  .jos-module-overlay {
+    align-items: center;
+  }
+
+  .jos-module-panel {
+    border-radius: 29px;
+  }
+
+  .jos-quick-add {
+    right: max(26px, calc((100vw - 820px) / 2 + 26px));
+  }
+}

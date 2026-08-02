@@ -53,6 +53,7 @@ function readStored<T>(key: string, fallback: T): T {
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('home')
+  const [modulesOpen, setModulesOpen] = useState(false)
   const [inventoryFilter, setInventoryFilter] = useState<StockStatus | undefined>()
   const [items, setItems] = useState<InventoryItem[]>(() => readStored('jos-one-react-items', seed))
   const [orders, setOrders] = useState<OrderRecord[]>(() => readStored('jos-one-react-orders', []))
@@ -69,6 +70,13 @@ export default function App() {
 
     return () => window.clearTimeout(timer)
   }, [items, orders, settings])
+
+  useEffect(() => {
+    document.body.style.overflow = modulesOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [modulesOpen])
 
   const updateItem = (updated: InventoryItem) => {
     setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
@@ -108,6 +116,7 @@ export default function App() {
   }
 
   const changeTab = (nextTab: Tab) => {
+    setModulesOpen(false)
     setTab(nextTab)
     if (nextTab !== 'inventory') setInventoryFilter(undefined)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -133,7 +142,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 1.1.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 1.2.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -145,73 +154,6 @@ export default function App() {
             </p>
           </div>
         </div>
-
-        <nav className="jos-module-nav" aria-label="JOS modules">
-          <button
-            type="button"
-            className={tab === 'home' ? 'active' : ''}
-            onClick={() => changeTab('home')}
-          >
-            <span className="module-nav-icon">⌂</span>
-            <span>Dashboard</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'review' ? 'active' : ''}
-            onClick={() => changeTab('review')}
-          >
-            <span className="module-nav-icon">◎</span>
-            <span>CEO Review</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'inventory' ? 'active' : ''}
-            onClick={() => changeTab('inventory')}
-          >
-            <span className="module-nav-icon">▤</span>
-            <span>Inventory</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'operations' ? 'active' : ''}
-            onClick={() => changeTab('operations')}
-          >
-            <span className="module-nav-icon">✓</span>
-            <span>Operations</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'pipeline' ? 'active' : ''}
-            onClick={() => changeTab('pipeline')}
-          >
-            <span className="module-nav-icon">◉</span>
-            <span>Pipeline</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'intelligence' ? 'active' : ''}
-            onClick={() => changeTab('intelligence')}
-          >
-            <span className="module-nav-icon">◈</span>
-            <span>Intelligence</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'finance' ? 'active' : ''}
-            onClick={() => changeTab('finance')}
-          >
-            <span className="module-nav-icon">£</span>
-            <span>Finance</span>
-          </button>
-          <button
-            type="button"
-            className={tab === 'backup' ? 'active' : ''}
-            onClick={() => changeTab('backup')}
-          >
-            <span className="module-nav-icon">⇅</span>
-            <span>Backup</span>
-          </button>
-        </nav>
       </header>
 
       {tab === 'review' && (
@@ -306,23 +248,85 @@ export default function App() {
         />
       )}
 
-      <nav className="bottom-nav five-tabs" aria-label="Main navigation">
+      <button
+        type="button"
+        className={`jos-quick-add ${tab === 'add' ? 'active' : ''}`}
+        onClick={() => changeTab('add')}
+        aria-label="Add stock item"
+      >
+        <span aria-hidden="true">＋</span>
+        <small>Add Stock</small>
+      </button>
+
+      <nav className="bottom-nav jos-primary-nav" aria-label="Primary navigation">
         <button type="button" className={tab === 'home' ? 'active' : ''} onClick={() => changeTab('home')}>
           <span aria-hidden="true">⌂</span><small>Home</small>
         </button>
         <button type="button" className={tab === 'inventory' ? 'active' : ''} onClick={() => openInventory()}>
           <span aria-hidden="true">▤</span><small>Inventory</small>
         </button>
-        <button type="button" className={tab === 'add' ? 'active' : ''} onClick={() => changeTab('add')}>
-          <span aria-hidden="true">＋</span><small>Add</small>
+        <button type="button" className={tab === 'operations' ? 'active' : ''} onClick={() => changeTab('operations')}>
+          <span aria-hidden="true">✓</span><small>Operations</small>
         </button>
-        <button type="button" className={tab === 'sourcecheck' ? 'active' : ''} onClick={() => changeTab('sourcecheck')}>
-          <span aria-hidden="true">⌕</span><small>SourceCheck</small>
+        <button type="button" className={tab === 'finance' ? 'active' : ''} onClick={() => changeTab('finance')}>
+          <span aria-hidden="true">£</span><small>Finance</small>
         </button>
-        <button type="button" className={tab === 'orders' ? 'active' : ''} onClick={() => changeTab('orders')}>
-          <span aria-hidden="true">▣</span><small>Orders</small>
+        <button
+          type="button"
+          className={!['home', 'inventory', 'operations', 'finance', 'add'].includes(tab) || modulesOpen ? 'active' : ''}
+          onClick={() => setModulesOpen(true)}
+          aria-expanded={modulesOpen}
+          aria-controls="jos-module-panel"
+        >
+          <span aria-hidden="true">☰</span><small>Modules</small>
         </button>
       </nav>
+
+      {modulesOpen && (
+        <div className="jos-module-overlay" role="presentation" onClick={() => setModulesOpen(false)}>
+          <section
+            id="jos-module-panel"
+            className="jos-module-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="JOS modules"
+            onClick={event => event.stopPropagation()}
+          >
+            <div className="jos-module-panel-handle" aria-hidden="true" />
+            <div className="jos-module-panel-header">
+              <div>
+                <p className="eyebrow">JOS ONE MODULES</p>
+                <h2>Choose a command centre</h2>
+              </div>
+              <button type="button" onClick={() => setModulesOpen(false)} aria-label="Close modules">×</button>
+            </div>
+
+            <div className="jos-module-grid">
+              <button type="button" onClick={() => changeTab('review')}>
+                <span>◎</span><strong>CEO Review</strong><small>Executive briefing and priorities</small>
+              </button>
+              <button type="button" onClick={() => changeTab('orders')}>
+                <span>▣</span><strong>Customers & Orders</strong><small>Sales, buyers and dispatch</small>
+              </button>
+              <button type="button" onClick={() => changeTab('pipeline')}>
+                <span>◉</span><strong>Listing Pipeline</strong><small>Photography through live listing</small>
+              </button>
+              <button type="button" onClick={() => changeTab('intelligence')}>
+                <span>◈</span><strong>Business Intelligence</strong><small>Evidence, brands and decisions</small>
+              </button>
+              <button type="button" onClick={() => changeTab('sourcecheck')}>
+                <span>⌕</span><strong>SourceCheck</strong><small>Assess potential stock purchases</small>
+              </button>
+              <button type="button" onClick={() => changeTab('backup')}>
+                <span>⇅</span><strong>Backup Centre</strong><small>Protect and restore business data</small>
+              </button>
+              <button type="button" onClick={() => changeTab('add')}>
+                <span>＋</span><strong>Add Stock</strong><small>Create a new inventory record</small>
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   )
 }
