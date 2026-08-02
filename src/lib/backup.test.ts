@@ -43,6 +43,17 @@ describe('backup migration', () => {
           }],
           history: [],
         },
+        launchCommand: {
+          openingStockTarget: 40,
+          readyListingTarget: 35,
+          priorityBrands: ['Nike', 'Carhartt'],
+          marketingTasks: [{
+            id: 'coming-soon',
+            completedAt: '2026-08-01T12:00:00.000Z',
+          }],
+          packagingTasks: [],
+          launchDayTasks: [],
+        },
       },
     })
 
@@ -50,6 +61,10 @@ describe('backup migration', () => {
     expect(result.settings.automation?.launchDate).toBe('2027-01-15')
     expect(result.settings.automation?.rules).toHaveLength(5)
     expect(result.settings.automation?.launchChecklist[0].completedAt).toBeTruthy()
+    expect(result.settings.launchCommand?.openingStockTarget).toBe(40)
+    expect(result.settings.launchCommand?.readyListingTarget).toBe(35)
+    expect(result.settings.launchCommand?.marketingTasks).toHaveLength(10)
+    expect(result.settings.launchCommand?.marketingTasks[0].completedAt).toBeTruthy()
   })
 
   it('rejects duplicate SKUs', () => {

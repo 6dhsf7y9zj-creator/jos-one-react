@@ -16,9 +16,11 @@ import { BrandPerformanceCentre } from './components/BrandPerformanceCentre'
 import { CeoRecommendationCentre } from './components/CeoRecommendationCentre'
 import { BusinessForecastingCentre } from './components/BusinessForecastingCentre'
 import { AutomationCentre } from './components/AutomationCentre'
+import { LaunchCommandCentre } from './components/LaunchCommandCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 import { createDefaultAutomationSettings } from './lib/automationCentre'
+import { createDefaultLaunchCommandSettings } from './lib/launchCommand'
 
 const seed: InventoryItem[] = [
   {
@@ -39,6 +41,7 @@ const defaultSettings: JosSettings = {
   storageLocations: ['Box A1', 'Box A2', 'Box B1', 'Rail 1', 'Shelf 1'],
   monthlyProfitTarget: 5000,
   automation: createDefaultAutomationSettings(),
+  launchCommand: createDefaultLaunchCommandSettings(),
   finance: {
     openingCash: 0,
     emergencyReserve: 0,
@@ -48,7 +51,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -136,6 +139,7 @@ export default function App() {
     recommendations: 'CEO Recommendation Engine',
     forecasting: 'Business Forecasting Engine',
     automation: 'Automation Centre',
+    'launch-command': 'January 2027 Launch Command Centre',
     inventory: 'Inventory Command Centre',
     'inventory-intelligence': 'Inventory Intelligence Engine',
     'brand-performance': 'Brand Performance Centre',
@@ -155,7 +159,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.6.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.7.0</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -200,6 +204,7 @@ export default function App() {
           onOpenRecommendations={() => changeTab('recommendations')}
           onOpenForecasting={() => changeTab('forecasting')}
           onOpenAutomation={() => changeTab('automation')}
+          onOpenLaunchCommand={() => changeTab('launch-command')}
         />
       )}
       {tab === 'recommendations' && (
@@ -243,6 +248,26 @@ export default function App() {
           onOpenBackup={() => changeTab('backup')}
           onOpenInventoryIntelligence={() => changeTab('inventory-intelligence')}
           onOpenFinance={() => changeTab('finance')}
+          onOpenLaunchCommand={() => changeTab('launch-command')}
+        />
+      )}
+      {tab === 'launch-command' && (
+        <LaunchCommandCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onChangeLaunchCommand={launchCommand =>
+            setSettings(current => ({ ...current, launchCommand }))
+          }
+          onChangeAutomation={automation =>
+            setSettings(current => ({ ...current, automation }))
+          }
+          onOpenInventory={() => openInventory()}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenSourceCheck={() => changeTab('sourcecheck')}
+          onOpenFinance={() => changeTab('finance')}
+          onOpenAutomation={() => changeTab('automation')}
+          onOpenBackup={() => changeTab('backup')}
         />
       )}
       {tab === 'inventory' && (
@@ -399,6 +424,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('automation')}>
                 <span>⟳</span><strong>Automation Centre</strong><small>Recurring reviews, alerts and launch readiness</small>
+              </button>
+              <button type="button" onClick={() => changeTab('launch-command')}>
+                <span>◫</span><strong>January 2027 Launch</strong><small>Stock, listings, marketing and launch-day control</small>
               </button>
 
               <button type="button" onClick={() => changeTab('inventory-intelligence')}>

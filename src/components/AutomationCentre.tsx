@@ -35,6 +35,7 @@ type Props = {
   onOpenBackup: () => void
   onOpenInventoryIntelligence: () => void
   onOpenFinance: () => void
+  onOpenLaunchCommand: () => void
 }
 
 type View = 'today' | 'rules' | 'launch' | 'evidence'
@@ -67,6 +68,7 @@ function destinationAction(
   if (destination === 'backup') return props.onOpenBackup
   if (destination === 'inventory-intelligence') return props.onOpenInventoryIntelligence
   if (destination === 'finance') return props.onOpenFinance
+  if (destination === 'launch') return props.onOpenLaunchCommand
   return openLaunch
 }
 
@@ -456,6 +458,9 @@ export function AutomationCentre(props: Props) {
               <div><i style={{ width: `${report.launch.progress}%` }} /></div>
               <strong>{report.launch.progress}%</strong>
             </div>
+            <JosButton variant="secondary" fullWidth onClick={props.onOpenLaunchCommand}>
+              Open Launch Command Centre
+            </JosButton>
             <label>
               Planned launch date
               <input

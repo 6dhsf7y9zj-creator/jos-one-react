@@ -1,5 +1,6 @@
 import type { FinanceState, FinanceTransaction, FinanceTransactionType, InventoryItem, JosSettings, ListingChecklist, ListingPipelineStage, OrderRecord, PhotoChecklist, StockStatus } from '../types/inventory'
 import { normaliseAutomationSettings } from './automationCentre'
+import { normaliseLaunchCommandSettings } from './launchCommand'
 
 export type JosBackup = {
   version: string
@@ -209,6 +210,7 @@ export function migrateBackup(input: unknown): JosBackup {
       : [],
     monthlyProfitTarget: numberValue(rawSettings.monthlyProfitTarget, 5000),
     automation: normaliseAutomationSettings(rawSettings.automation),
+    launchCommand: normaliseLaunchCommandSettings(rawSettings.launchCommand),
     finance: financeStateValue(rawSettings.finance),
   }
 
@@ -222,7 +224,7 @@ export function migrateBackup(input: unknown): JosBackup {
 
 export function createBackup(items: InventoryItem[], orders: OrderRecord[], settings: JosSettings): JosBackup {
   return {
-    version: '3.3.0',
+    version: '3.4.0',
     exportedAt: new Date().toISOString(),
     items,
     orders,

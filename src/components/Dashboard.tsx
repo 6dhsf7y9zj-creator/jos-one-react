@@ -8,6 +8,7 @@ import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
 import { calculateBusinessForecast } from '../lib/businessForecasting'
 import { calculateAutomationReport } from '../lib/automationCentre'
 import { getAutoBackups, getLastOffDeviceExportAt } from '../lib/autoBackup'
+import { calculateLaunchCommandReport } from '../lib/launchCommand'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -22,6 +23,7 @@ type DashboardProps = {
   onOpenRecommendations: () => void
   onOpenForecasting: () => void
   onOpenAutomation: () => void
+  onOpenLaunchCommand: () => void
 }
 
 function greeting(): string {
@@ -54,6 +56,7 @@ export function Dashboard({
   onOpenRecommendations,
   onOpenForecasting,
   onOpenAutomation,
+  onOpenLaunchCommand,
 }: DashboardProps) {
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
@@ -86,6 +89,7 @@ export function Dashboard({
       lastOffDeviceExportAt: getLastOffDeviceExportAt(),
     },
   )
+  const launch = calculateLaunchCommandReport(items, orders, settings)
   const topBrands = brandPerformance.brands.slice(0, 4)
   const workflow = [
     { label: 'Prep', count: metrics.prepItems, status: 'Prep' as StockStatus },
@@ -182,6 +186,26 @@ export function Dashboard({
         </div>
         <JosButton variant="secondary" fullWidth onClick={onOpenAutomation}>
           Open Automation Centre
+        </JosButton>
+      </section>
+
+      <section className={`ceo-launch-summary phase-${launch.phase}`}>
+        <div>
+          <p className="eyebrow">JANUARY 2027 LAUNCH</p>
+          <h2>{launch.overallReadiness}% ready · {launch.daysRemaining} days</h2>
+          <p>
+            {launch.stock.eligibleItems}/{launch.stock.target} launch stock ·
+            {` ${launch.listings.readyItems}/${launch.listings.target} listings ready · `}
+            {launch.blockers.length} blockers
+          </p>
+        </div>
+        <div className="ceo-launch-metrics">
+          <span><strong>{launch.marketing.progress}%</strong>marketing</span>
+          <span><strong>{launch.packaging.progress}%</strong>packaging</span>
+          <span><strong>{launch.brands.coveredBrands}/{launch.brands.priorityBrands}</strong>priority brands</span>
+        </div>
+        <JosButton variant="secondary" fullWidth onClick={onOpenLaunchCommand}>
+          Open Launch Command Centre
         </JosButton>
       </section>
 

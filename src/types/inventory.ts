@@ -157,11 +157,28 @@ export interface AutomationSettings {
   history: AutomationHistoryEntry[];
 }
 
+
+export interface LaunchTaskState {
+  id: string;
+  completedAt?: string;
+}
+
+export interface LaunchCommandSettings {
+  openingStockTarget: number;
+  readyListingTarget: number;
+  priorityBrands: string[];
+  marketingTasks: LaunchTaskState[];
+  packagingTasks: LaunchTaskState[];
+  launchDayTasks: LaunchTaskState[];
+  lastReviewedAt?: string;
+}
+
 export interface JosSettings {
   minimumProfit: number;
   targetRoi: number;
   storageLocations: string[];
   monthlyProfitTarget?: number;
   automation?: AutomationSettings;
+  launchCommand?: LaunchCommandSettings;
   finance?: FinanceState;
 }
