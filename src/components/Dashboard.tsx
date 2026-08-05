@@ -10,6 +10,7 @@ import { calculateAutomationReport } from '../lib/automationCentre.ts'
 import { getAutoBackups, getLastOffDeviceExportAt } from '../lib/autoBackup.ts'
 import { calculateLaunchCommandReport } from '../lib/launchCommand.ts'
 import { calculateSalesProfitPlan } from '../lib/salesProfitPlanning.ts'
+import { useJOSCore } from '../core/CoreProvider.tsx'
 
 type DashboardProps = {
   items: InventoryItem[]
@@ -61,6 +62,7 @@ export function Dashboard({
   onOpenLaunchCommand,
   onOpenSalesPlanning,
 }: DashboardProps) {
+  const { systemHealth } = useJOSCore()
   const metrics = calculateCeoDashboard(items, orders)
   const executive = calculateExecutiveKpis(items, orders, settings.finance)
   const firstMission = metrics.missions[0]
@@ -123,6 +125,22 @@ export function Dashboard({
           <span>Business health</span>
           <strong>{metrics.businessHealth}</strong>
           <small>/100 · {metrics.healthLabel}</small>
+        </div>
+      </section>
+
+      <section className={`core-health-panel health-${systemHealth.label.toLowerCase().replace(/\s+/g, '-')}`}>
+        <div>
+          <p className="eyebrow">JOS CORE · SYSTEM HEALTH</p>
+          <h2>{systemHealth.score}/100 · {systemHealth.label}</h2>
+          <p>{systemHealth.errors} errors · {systemHealth.warnings} warnings · {systemHealth.completeness}% data completeness</p>
+        </div>
+        <div className="core-health-checks">
+          {systemHealth.checks.map(check => (
+            <span className={`status-${check.status}`} key={check.label}>
+              <strong>{check.status === 'pass' ? '✓' : check.status === 'fail' ? '!' : '•'} {check.label}</strong>
+              <small>{check.detail}</small>
+            </span>
+          ))}
         </div>
       </section>
 

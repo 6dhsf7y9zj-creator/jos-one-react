@@ -24,6 +24,8 @@ import { saveAutoBackup } from './lib/autoBackup.ts'
 import { createDefaultAutomationSettings } from './lib/automationCentre.ts'
 import { createDefaultLaunchCommandSettings } from './lib/launchCommand.ts'
 import { defaultSalesPlanningSettings } from './lib/salesProfitPlanning.ts'
+import { CoreProvider } from './core/CoreProvider.tsx'
+import { deleteInventoryThroughCore, saveInventoryThroughCore } from './core/JOSCore.ts'
 
 const seed: InventoryItem[] = [
   {
@@ -95,29 +97,17 @@ export default function App() {
   }, [modulesOpen])
 
   const updateItem = (updated: InventoryItem) => {
-    setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
+    const result = saveInventoryThroughCore(items, orders, settings, updated.sku, updated)
+    setItems(result.items)
+    setOrders(result.orders)
+    setSettings(result.settings)
   }
 
   const saveEditedItem = (originalSku: string, updated: InventoryItem) => {
-    setItems(current => current.map(item => (item.sku === originalSku ? updated : item)))
-    if (updated.sku !== originalSku) {
-      setOrders(current => current.map(order =>
-        order.sku === originalSku ? { ...order, sku: updated.sku } : order,
-      ))
-      setSettings(current => ({
-        ...current,
-        finance: current.finance
-          ? {
-              ...current.finance,
-              transactions: current.finance.transactions.map(transaction =>
-                transaction.sku === originalSku
-                  ? { ...transaction, sku: updated.sku }
-                  : transaction,
-              ),
-            }
-          : current.finance,
-      }))
-    }
+    const result = saveInventoryThroughCore(items, orders, settings, originalSku, updated)
+    setItems(result.items)
+    setOrders(result.orders)
+    setSettings(result.settings)
     setEditingSku(undefined)
     setInventoryFilter(undefined)
     setTab('inventory')
@@ -143,7 +133,7 @@ export default function App() {
   }
 
   const deleteItem = (sku: string) => {
-    setItems(current => current.filter(item => item.sku !== sku))
+    setItems(current => deleteInventoryThroughCore(current, sku))
     if (editingSku === sku) {
       setEditingSku(undefined)
       setTab('inventory')
@@ -151,7 +141,10 @@ export default function App() {
   }
 
   const addItem = (item: InventoryItem) => {
-    setItems(current => [...current, item])
+    const result = saveInventoryThroughCore(items, orders, settings, undefined, item)
+    setItems(result.items)
+    setOrders(result.orders)
+    setSettings(result.settings)
     setInventoryFilter(undefined)
     setTab('inventory')
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -205,12 +198,13 @@ export default function App() {
   }
 
   return (
+    <CoreProvider items={items} orders={orders} settings={settings}>
     <div className="app-shell">
       <header className="jos-universal-header">
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.8.1</p>
+            <p className="eyebrow">JOS ONE · VERSION 3.1.0 SPRINT 1</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -546,5 +540,6 @@ export default function App() {
         </div>
       )}
     </div>
+    </CoreProvider>
   )
 }
