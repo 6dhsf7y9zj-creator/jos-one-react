@@ -8,6 +8,7 @@ import { SourceCheck } from './components/SourceCheck.tsx'
 import { Orders } from './components/Orders.tsx'
 import { FinanceCommandCentre } from './components/FinanceCommandCentre.tsx'
 import { BusinessIntelligence } from './components/BusinessIntelligence.tsx'
+import { CoreDiagnosticsCentre } from './components/CoreDiagnosticsCentre.tsx'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline.tsx'
 import { OperationsCommandCentre } from './components/OperationsCommandCentre.tsx'
 import { CeoReviewCentre } from './components/CeoReviewCentre.tsx'
@@ -57,7 +58,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'diagnostics' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -194,6 +195,7 @@ export default function App() {
     pipeline: 'Photography & Listing Pipeline',
     finance: 'Finance Command Centre',
     intelligence: 'Business Intelligence',
+    diagnostics: 'Core Diagnostics Centre',
     backup: 'Backup Centre',
   }
 
@@ -204,7 +206,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 3.2.0 SPRINT 2</p>
+            <p className="eyebrow">JOS ONE · VERSION 3.3.0 SPRINT 3</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -251,6 +253,7 @@ export default function App() {
           onOpenAutomation={() => changeTab('automation')}
           onOpenLaunchCommand={() => changeTab('launch-command')}
           onOpenSalesPlanning={() => changeTab('sales-planning')}
+          onOpenDiagnostics={() => changeTab('diagnostics')}
         />
       )}
       {tab === 'sales-planning' && (
@@ -429,6 +432,10 @@ export default function App() {
           onOpenOrders={() => changeTab('orders')}
         />
       )}
+      {tab === 'diagnostics' && (
+        <CoreDiagnosticsCentre onOpenInventory={openInventoryEdit} />
+      )}
+
       {tab === 'backup' && (
         <BackupCenter
           items={items}
@@ -528,6 +535,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('sourcecheck')}>
                 <span>⌕</span><strong>SourceCheck</strong><small>Assess potential stock purchases</small>
+              </button>
+              <button type="button" onClick={() => changeTab('diagnostics')}>
+                <span>◇</span><strong>Core Diagnostics</strong><small>Data Hub, relationships and audit trail</small>
               </button>
               <button type="button" onClick={() => changeTab('backup')}>
                 <span>⇅</span><strong>Backup Centre</strong><small>Protect and restore business data</small>

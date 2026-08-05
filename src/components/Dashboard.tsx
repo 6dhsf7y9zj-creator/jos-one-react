@@ -27,6 +27,7 @@ type DashboardProps = {
   onOpenAutomation: () => void
   onOpenLaunchCommand: () => void
   onOpenSalesPlanning: () => void
+  onOpenDiagnostics: () => void
 }
 
 function greeting(): string {
@@ -61,6 +62,7 @@ export function Dashboard({
   onOpenAutomation,
   onOpenLaunchCommand,
   onOpenSalesPlanning,
+  onOpenDiagnostics,
 }: DashboardProps) {
   const { systemHealth } = useJOSCore()
   const metrics = calculateCeoDashboard(items, orders)
@@ -128,6 +130,7 @@ export function Dashboard({
         </div>
       </section>
 
+      <button type="button" className="core-health-open" onClick={onOpenDiagnostics}>Open Core Diagnostics</button>
       <section className={`core-health-panel health-${systemHealth.label.toLowerCase().replace(/\s+/g, '-')}`}>
         <div>
           <p className="eyebrow">JOS CORE · SYSTEM HEALTH</p>
