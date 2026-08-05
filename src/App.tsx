@@ -10,6 +10,7 @@ import { FinanceCommandCentre } from './components/FinanceCommandCentre.tsx'
 import { BusinessIntelligence } from './components/BusinessIntelligence.tsx'
 import { CoreDiagnosticsCentre } from './components/CoreDiagnosticsCentre.tsx'
 import { ProductionReadinessCentre } from './components/ProductionReadinessCentre.tsx'
+import { RevenueIntelligenceCentre } from './components/RevenueIntelligenceCentre.tsx'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline.tsx'
 import { OperationsCommandCentre } from './components/OperationsCommandCentre.tsx'
 import { CeoReviewCentre } from './components/CeoReviewCentre.tsx'
@@ -60,7 +61,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'diagnostics' | 'production-readiness' | 'backup'
+type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'diagnostics' | 'production-readiness' | 'revenue-intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -200,6 +201,7 @@ export default function App() {
     intelligence: 'Business Intelligence',
     diagnostics: 'Core Diagnostics Centre',
     'production-readiness': 'Production Readiness Centre',
+    'revenue-intelligence': 'Revenue Intelligence Centre',
     backup: 'Backup Centre',
   }
 
@@ -210,7 +212,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 3.5.0 SPRINT 5</p>
+            <p className="eyebrow">JOS ONE · VERSION 3.6.0 SPRINT 6</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -440,6 +442,18 @@ export default function App() {
         <CoreDiagnosticsCentre onOpenInventory={openInventoryEdit} onOpenBackup={() => changeTab('backup')} />
       )}
 
+      {tab === 'revenue-intelligence' && (
+        <RevenueIntelligenceCentre
+          items={items}
+          orders={orders}
+          finance={settings.finance}
+          onOpenInventory={openInventory}
+          onOpenPipeline={() => changeTab('pipeline')}
+          onOpenOrders={() => changeTab('orders')}
+          onOpenFinance={() => changeTab('finance')}
+        />
+      )}
+
       {tab === 'production-readiness' && (
         <ProductionReadinessCentre
           items={items}
@@ -526,6 +540,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('forecasting')}>
                 <span>↗</span><strong>Business Forecasting</strong><small>Cash, profit, reserves and target outlook</small>
+              </button>
+              <button type="button" onClick={() => changeTab('revenue-intelligence')}>
+                <span>£</span><strong>Revenue Intelligence</strong><small>Blocked cash, profit opportunities and ranked actions</small>
               </button>
               <button type="button" onClick={() => changeTab('automation')}>
                 <span>⟳</span><strong>Automation Centre</strong><small>Recurring reviews, alerts and launch readiness</small>
