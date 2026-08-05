@@ -21,8 +21,8 @@ describe('Sprint 4 reliability and recovery integration', () => {
     expect(eventSource).toContain('clearBusinessAuditTrail')
   })
 
-  it('records recovery activity and exposes Sprint 4 versioning', () => {
+  it('records recovery activity and exposes current release versioning', () => {
     expect(appSource).toContain("type: 'backup.restored'")
-    expect(appSource).toContain('VERSION 3.4.0 SPRINT 4')
+    expect(appSource).toContain('VERSION 3.5.0 SPRINT 5')
   })
 })
