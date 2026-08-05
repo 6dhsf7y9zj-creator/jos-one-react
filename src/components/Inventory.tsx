@@ -14,7 +14,7 @@ type InventoryProps = {
   items: InventoryItem[]
   onUpdate: (item: InventoryItem) => void
   onUpdateMany: (items: InventoryItem[]) => void
-  onDelete: (sku: string) => void
+  onEdit: (sku: string) => void
   initialStatus?: StockStatus
 }
 
@@ -26,8 +26,6 @@ type SortOption =
   | 'sale-high'
   | 'roi-high'
   | 'status'
-
-type EditableItem = InventoryItem
 
 function unique(values: Array<string | undefined>): string[] {
   return [...new Set(values.filter((value): value is string => Boolean(value?.trim())))]
@@ -79,7 +77,7 @@ export function Inventory({
   items,
   onUpdate,
   onUpdateMany,
-  onDelete,
+  onEdit,
   initialStatus,
 }: InventoryProps) {
   const [query, setQuery] = useState('')
@@ -94,7 +92,6 @@ export function Inventory({
   const [bulkStatus, setBulkStatus] = useState<StockStatus>('Prep')
   const [bulkGrade, setBulkGrade] = useState<InventoryItem['grade']>('B')
   const [bulkStorage, setBulkStorage] = useState('')
-  const [editing, setEditing] = useState<EditableItem | null>(null)
   const [notice, setNotice] = useState('')
 
   useEffect(() => {
@@ -220,40 +217,6 @@ export function Inventory({
     setSelected([])
   }
 
-  const saveEdit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (!editing) return
-    if (
-      !editing.brand.trim() ||
-      !editing.description.trim() ||
-      editing.purchasePrice < 0 ||
-      editing.expectedSalePrice < 0
-    ) {
-      setNotice('Brand, description and valid prices are required.')
-      return
-    }
-    onUpdate({
-      ...editing,
-      brand: editing.brand.trim(),
-      category: editing.category.trim(),
-      description: editing.description.trim(),
-      size: editing.size.trim() || 'N/A',
-      storageLocation: editing.storageLocation.trim() || 'TBC',
-    })
-    setNotice(`${editing.sku} updated.`)
-    setEditing(null)
-  }
-
-  const deleteItem = (item: InventoryItem) => {
-    if (
-      !window.confirm(
-        `Delete ${item.sku} — ${item.brand} ${item.category}? Automatic Backup will preserve a recoverable snapshot.`,
-      )
-    ) return
-    onDelete(item.sku)
-    setEditing(null)
-    setNotice(`${item.sku} deleted. It can be recovered from Backup Centre.`)
-  }
 
   return (
     <main className="screen inventory-command-centre">
@@ -441,7 +404,7 @@ export function Inventory({
                 />
               </div>
 
-              <button type="button" className="item-open" onClick={() => setEditing({ ...item })}>
+              <button type="button" className="item-open" onClick={() => onEdit(item.sku)}>
                 <div className="item-card-top">
                   <div>
                     <p className="eyebrow">{item.sku}</p>
@@ -465,7 +428,7 @@ export function Inventory({
               </button>
 
               <div className="item-quick-actions">
-                <button type="button" onClick={() => setEditing({ ...item })}>View / Edit</button>
+                <button type="button" onClick={() => onEdit(item.sku)}>View / Edit</button>
                 {item.status !== 'Archived' && (
                   <button
                     type="button"
@@ -481,55 +444,6 @@ export function Inventory({
         })}
       </div>
 
-      {editing && (
-        <section className="inventory-editor-overlay" role="dialog" aria-modal="true" aria-label={`Edit ${editing.sku}`}>
-          <form className="inventory-editor" onSubmit={saveEdit}>
-            <div className="editor-header">
-              <div>
-                <p className="eyebrow">{editing.sku}</p>
-                <h2>Item details</h2>
-              </div>
-              <button type="button" onClick={() => setEditing(null)} aria-label="Close editor">×</button>
-            </div>
-
-            <div className="editor-profit-summary">
-              <div><span>Expected profit</span><strong>£{expectedProfit(editing).toFixed(2)}</strong></div>
-              <div><span>ROI</span><strong>{itemRoi(editing).toFixed(0)}%</strong></div>
-            </div>
-
-            <div className="editor-grid">
-              <label>Brand<input value={editing.brand} onChange={event => setEditing({ ...editing, brand: event.target.value })} /></label>
-              <label>Category<input value={editing.category} onChange={event => setEditing({ ...editing, category: event.target.value })} /></label>
-              <label className="editor-full">Description<input value={editing.description} onChange={event => setEditing({ ...editing, description: event.target.value })} /></label>
-              <label>Department<input value={editing.department ?? ''} onChange={event => setEditing({ ...editing, department: event.target.value })} /></label>
-              <label>Size<input value={editing.size} onChange={event => setEditing({ ...editing, size: event.target.value })} /></label>
-              <label>Colour<input value={editing.colour ?? ''} onChange={event => setEditing({ ...editing, colour: event.target.value })} /></label>
-              <label>Condition<input value={editing.condition} onChange={event => setEditing({ ...editing, condition: event.target.value })} /></label>
-              <label>Status
-                <select value={editing.status} onChange={event => setEditing({ ...editing, status: event.target.value as StockStatus })}>
-                  {lifecycle.map(value => <option key={value}>{value}</option>)}
-                </select>
-              </label>
-              <label>Grade
-                <select value={editing.grade} onChange={event => setEditing({ ...editing, grade: event.target.value as InventoryItem['grade'] })}>
-                  <option>A</option><option>B</option><option>C</option><option>Exit</option>
-                </select>
-              </label>
-              <label>Purchase price (£)<input inputMode="decimal" type="number" step="0.01" min="0" value={editing.purchasePrice} onChange={event => setEditing({ ...editing, purchasePrice: Number(event.target.value) })} /></label>
-              <label>Expected sale (£)<input inputMode="decimal" type="number" step="0.01" min="0" value={editing.expectedSalePrice} onChange={event => setEditing({ ...editing, expectedSalePrice: Number(event.target.value) })} /></label>
-              <label>Actual sale (£)<input inputMode="decimal" type="number" step="0.01" min="0" value={editing.actualSalePrice ?? ''} onChange={event => setEditing({ ...editing, actualSalePrice: event.target.value ? Number(event.target.value) : undefined })} /></label>
-              <label>Storage<input value={editing.storageLocation} onChange={event => setEditing({ ...editing, storageLocation: event.target.value })} /></label>
-              <label className="editor-full">Notes<textarea rows={4} value={editing.notes ?? ''} onChange={event => setEditing({ ...editing, notes: event.target.value })} /></label>
-            </div>
-
-            <div className="editor-actions">
-              <button type="submit" className="primary-action">Save changes</button>
-              <button type="button" className="secondary-action" onClick={() => setEditing(null)}>Cancel</button>
-              <button type="button" className="delete-item-action" onClick={() => deleteItem(editing)}>Delete item</button>
-            </div>
-          </form>
-        </section>
-      )}
     </main>
   )
 }

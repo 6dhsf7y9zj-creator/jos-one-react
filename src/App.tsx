@@ -17,6 +17,7 @@ import { CeoRecommendationCentre } from './components/CeoRecommendationCentre'
 import { BusinessForecastingCentre } from './components/BusinessForecastingCentre'
 import { AutomationCentre } from './components/AutomationCentre'
 import { LaunchCommandCentre } from './components/LaunchCommandCentre'
+import { InventoryEditCentre } from './components/InventoryEditCentre'
 import type { InventoryItem, JosSettings, OrderRecord, StockStatus } from './types/inventory'
 import { saveAutoBackup } from './lib/autoBackup'
 import { createDefaultAutomationSettings } from './lib/automationCentre'
@@ -51,7 +52,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
+type Tab = 'home' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -66,6 +67,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('home')
   const [modulesOpen, setModulesOpen] = useState(false)
   const [inventoryFilter, setInventoryFilter] = useState<StockStatus | undefined>()
+  const [editingSku, setEditingSku] = useState<string | undefined>()
   const [items, setItems] = useState<InventoryItem[]>(() => readStored('jos-one-react-items', seed))
   const [orders, setOrders] = useState<OrderRecord[]>(() => readStored('jos-one-react-orders', []))
   const [settings, setSettings] = useState<JosSettings>(() => readStored('jos-one-react-settings', defaultSettings))
@@ -93,6 +95,45 @@ export default function App() {
     setItems(current => current.map(item => (item.sku === updated.sku ? updated : item)))
   }
 
+  const saveEditedItem = (originalSku: string, updated: InventoryItem) => {
+    setItems(current => current.map(item => (item.sku === originalSku ? updated : item)))
+    if (updated.sku !== originalSku) {
+      setOrders(current => current.map(order =>
+        order.sku === originalSku ? { ...order, sku: updated.sku } : order,
+      ))
+      setSettings(current => ({
+        ...current,
+        finance: current.finance
+          ? {
+              ...current.finance,
+              transactions: current.finance.transactions.map(transaction =>
+                transaction.sku === originalSku
+                  ? { ...transaction, sku: updated.sku }
+                  : transaction,
+              ),
+            }
+          : current.finance,
+      }))
+    }
+    setEditingSku(undefined)
+    setInventoryFilter(undefined)
+    setTab('inventory')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const openInventoryEdit = (sku: string) => {
+    setEditingSku(sku)
+    setModulesOpen(false)
+    setTab('inventory-edit')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const closeInventoryEdit = () => {
+    setEditingSku(undefined)
+    setTab('inventory')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const updateManyItems = (updatedItems: InventoryItem[]) => {
     const updates = new Map(updatedItems.map(item => [item.sku, item]))
     setItems(current => current.map(item => updates.get(item.sku) ?? item))
@@ -100,6 +141,10 @@ export default function App() {
 
   const deleteItem = (sku: string) => {
     setItems(current => current.filter(item => item.sku !== sku))
+    if (editingSku === sku) {
+      setEditingSku(undefined)
+      setTab('inventory')
+    }
   }
 
   const addItem = (item: InventoryItem) => {
@@ -130,6 +175,7 @@ export default function App() {
     setModulesOpen(false)
     setTab(nextTab)
     if (nextTab !== 'inventory') setInventoryFilter(undefined)
+    if (nextTab !== 'inventory-edit') setEditingSku(undefined)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -141,6 +187,7 @@ export default function App() {
     automation: 'Automation Centre',
     'launch-command': 'January 2027 Launch Command Centre',
     inventory: 'Inventory Command Centre',
+    'inventory-edit': 'Inventory Edit Centre',
     'inventory-intelligence': 'Inventory Intelligence Engine',
     'brand-performance': 'Brand Performance Centre',
     add: 'Add Stock Item',
@@ -159,7 +206,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 2.7.0</p>
+            <p className="eyebrow">JOS ONE · VERSION 2.7.2</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -275,10 +322,29 @@ export default function App() {
           items={items}
           onUpdate={updateItem}
           onUpdateMany={updateManyItems}
-          onDelete={deleteItem}
+          onEdit={openInventoryEdit}
           initialStatus={inventoryFilter}
         />
       )}
+      {tab === 'inventory-edit' && editingSku && (() => {
+        const editingItem = items.find(item => item.sku === editingSku)
+        return editingItem ? (
+          <InventoryEditCentre
+            item={editingItem}
+            items={items}
+            settings={settings}
+            onSave={saveEditedItem}
+            onDelete={deleteItem}
+            onCancel={closeInventoryEdit}
+            onMove={openInventoryEdit}
+          />
+        ) : (
+          <main className="screen panel">
+            <p>The selected inventory item could not be found.</p>
+            <button type="button" className="primary-action" onClick={closeInventoryEdit}>Return to Inventory</button>
+          </main>
+        )
+      })()}
       {tab === 'inventory-intelligence' && (
         <InventoryIntelligenceEngine
           items={items}
@@ -359,7 +425,7 @@ export default function App() {
         />
       )}
 
-      <button
+      {tab !== 'inventory-edit' && <button
         type="button"
         className={`jos-quick-add ${tab === 'add' ? 'active' : ''}`}
         onClick={() => changeTab('add')}
@@ -367,9 +433,9 @@ export default function App() {
       >
         <span aria-hidden="true">＋</span>
         <small>Add Stock</small>
-      </button>
+      </button>}
 
-      <nav className="bottom-nav jos-primary-nav" aria-label="Primary navigation">
+      {tab !== 'inventory-edit' && <nav className="bottom-nav jos-primary-nav" aria-label="Primary navigation">
         <button type="button" className={tab === 'home' ? 'active' : ''} onClick={() => changeTab('home')}>
           <span aria-hidden="true">⌂</span><small>Home</small>
         </button>
@@ -391,9 +457,9 @@ export default function App() {
         >
           <span aria-hidden="true">☰</span><small>Modules</small>
         </button>
-      </nav>
+      </nav>}
 
-      {modulesOpen && (
+      {modulesOpen && tab !== 'inventory-edit' && (
         <div className="jos-module-overlay" role="presentation" onClick={() => setModulesOpen(false)}>
           <section
             id="jos-module-panel"

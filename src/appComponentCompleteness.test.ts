@@ -10,6 +10,7 @@ import reviewSource from './components/CeoReviewCentre.tsx?raw'
 import dashboardSource from './components/Dashboard.tsx?raw'
 import financeSource from './components/FinanceCommandCentre.tsx?raw'
 import inventorySource from './components/Inventory.tsx?raw'
+import inventoryEditSource from './components/InventoryEditCentre.tsx?raw'
 import inventoryIntelligenceSource from './components/InventoryIntelligenceEngine.tsx?raw'
 import launchSource from './components/LaunchCommandCentre.tsx?raw'
 import operationsSource from './components/OperationsCommandCentre.tsx?raw'
@@ -30,6 +31,7 @@ describe('App component completeness', () => {
     expect(dashboardSource).toContain('export function Dashboard')
     expect(financeSource).toContain('export function FinanceCommandCentre')
     expect(inventorySource).toContain('export function Inventory')
+    expect(inventoryEditSource).toContain('export function InventoryEditCentre')
     expect(inventoryIntelligenceSource).toContain('export function InventoryIntelligenceEngine')
     expect(launchSource).toContain('export function LaunchCommandCentre')
     expect(operationsSource).toContain('export function OperationsCommandCentre')
