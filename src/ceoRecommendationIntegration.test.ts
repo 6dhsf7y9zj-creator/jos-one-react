@@ -1,9 +1,9 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import appSource from './App.tsx?raw'
-import dashboardSource from './components/Dashboard.tsx?raw'
-import reviewSource from './components/CeoReviewCentre.tsx?raw'
-import engineSource from './lib/ceoRecommendations.ts?raw'
-
+const appSource = readFileSync(new URL('./App.tsx', import.meta.url), 'utf8')
+const dashboardSource = readFileSync(new URL('./components/Dashboard.tsx', import.meta.url), 'utf8')
+const reviewSource = readFileSync(new URL('./components/CeoReviewCentre.tsx', import.meta.url), 'utf8')
+const engineSource = readFileSync(new URL('./lib/ceoRecommendations.ts', import.meta.url), 'utf8')
 describe('CEO Recommendation Engine integration', () => {
   it('adds a route and module launcher', () => {
     expect(appSource).toContain("tab === 'recommendations'")
