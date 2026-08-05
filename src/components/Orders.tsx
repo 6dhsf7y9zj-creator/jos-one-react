@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import type { InventoryItem, OrderRecord, OrderStatus } from '../types/inventory'
-import { advanceOrder, calculateOrderMetrics, customerSummaries, isActiveOrder, orderInventoryStatus, orderStages } from '../lib/orders'
+import type { InventoryItem, OrderRecord, OrderStatus } from '../types/inventory.ts'
+import { advanceOrder, calculateOrderMetrics, customerSummaries, isActiveOrder, orderInventoryStatus, orderStages } from '../lib/orders.ts'
 
 type Props = {
   orders: OrderRecord[]

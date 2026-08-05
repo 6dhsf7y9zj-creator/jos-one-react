@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { InventoryItem, JosSettings, ListingPipelineStage, StockStatus } from '../types/inventory'
-import { expectedProfit, itemRoi } from '../lib/inventory'
-import { JosButton, NoticeCard, SectionHeader } from '../ui'
+import type { InventoryItem, JosSettings, ListingPipelineStage, StockStatus } from '../types/inventory.ts'
+import { expectedProfit, itemRoi } from '../lib/inventory.ts'
+import { JosButton, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   item: InventoryItem

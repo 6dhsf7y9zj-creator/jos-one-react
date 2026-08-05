@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react'
-import type { FinanceState, InventoryItem } from '../types/inventory'
+import type { FinanceState, InventoryItem } from '../types/inventory.ts'
 import {
   calculateBrandPerformance,
   type BrandEvidence,
   type BrandPerformance,
   type BrandPerformanceTargets,
   type BrandRecommendation,
-} from '../lib/brandPerformance'
-import { formatFinanceMoney } from '../lib/finance'
-import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/brandPerformance.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

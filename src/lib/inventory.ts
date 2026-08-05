@@ -1,4 +1,4 @@
-import type { InventoryItem, StockStatus } from '../types/inventory';
+import type { InventoryItem, StockStatus } from '../types/inventory.ts';
 
 export const lifecycle: StockStatus[] = ['Prep', 'Photographed', 'Live', 'Sold', 'Dispatched', 'Archived'];
 

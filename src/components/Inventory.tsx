@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { InventoryItem, StockStatus } from '../types/inventory'
+import type { InventoryItem, StockStatus } from '../types/inventory.ts'
 import {
   duplicateSkus,
   expectedProfit,
@@ -7,8 +7,8 @@ import {
   lifecycle,
   nextStatus,
   normaliseInventoryText,
-} from '../lib/inventory'
-import { EmptyState, JosButton, KpiCard, NoticeCard } from '../ui'
+} from '../lib/inventory.ts'
+import { EmptyState, JosButton, KpiCard, NoticeCard } from '../ui/index.ts'
 
 type InventoryProps = {
   items: InventoryItem[]

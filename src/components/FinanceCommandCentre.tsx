@@ -4,7 +4,7 @@ import type {
   FinanceTransaction,
   FinanceTransactionType,
   InventoryItem,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateFinanceSummary,
   createFinanceTransactionId,
@@ -12,8 +12,8 @@ import {
   financeTransactionEffect,
   formatFinanceMoney,
   normaliseFinanceState,
-} from '../lib/finance'
-import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/finance.ts'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type FinanceProps = {
   items: InventoryItem[]

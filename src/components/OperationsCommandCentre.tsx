@@ -1,7 +1,7 @@
-import type { InventoryItem, OrderRecord, StockStatus } from '../types/inventory'
-import { advancePipeline } from '../lib/pipeline'
-import { calculateOperations, type OperationsDestination, type OperationsTask } from '../lib/operations'
-import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui'
+import type { InventoryItem, OrderRecord, StockStatus } from '../types/inventory.ts'
+import { advancePipeline } from '../lib/pipeline.ts'
+import { calculateOperations, type OperationsDestination, type OperationsTask } from '../lib/operations.ts'
+import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

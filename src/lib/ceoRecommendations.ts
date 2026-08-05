@@ -3,14 +3,14 @@ import type {
   JosSettings,
   OrderRecord,
   StockStatus,
-} from '../types/inventory'
-import { calculateBrandPerformance, type BrandPerformance } from './brandPerformance'
-import { calculateFinanceSummary } from './finance'
+} from '../types/inventory.ts'
+import { calculateBrandPerformance, type BrandPerformance } from './brandPerformance.ts'
+import { calculateFinanceSummary } from './finance.ts'
 import {
   calculateInventoryIntelligence,
   type InventoryItemIntelligence,
-} from './inventoryIntelligence'
-import { calculateOperations } from './operations'
+} from './inventoryIntelligence.ts'
+import { calculateOperations } from './operations.ts'
 
 export type CeoRecommendationDestination =
   | 'orders'

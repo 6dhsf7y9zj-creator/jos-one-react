@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { JosSettings } from '../types/inventory'
+import type { JosSettings } from '../types/inventory.ts'
 
 export function SourceCheck({ settings }: { settings: JosSettings }) {
   const [brand, setBrand] = useState('')

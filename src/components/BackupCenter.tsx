@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { InventoryItem, JosSettings, OrderRecord } from '../types/inventory'
-import { createBackup, migrateBackup, type JosBackup } from '../lib/backup'
+import type { InventoryItem, JosSettings, OrderRecord } from '../types/inventory.ts'
+import { createBackup, migrateBackup, type JosBackup } from '../lib/backup.ts'
 import {
   clearAutoBackups,
   deleteAutoBackup,
@@ -11,7 +11,7 @@ import {
   LAST_OFF_DEVICE_EXPORT_KEY,
   saveAutoBackup,
   type AutoBackupSnapshot,
-} from '../lib/autoBackup'
+} from '../lib/autoBackup.ts'
 
 type BackupCenterProps = {
   items: InventoryItem[]

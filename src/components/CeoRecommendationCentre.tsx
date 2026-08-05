@@ -4,15 +4,15 @@ import type {
   JosSettings,
   OrderRecord,
   StockStatus,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateCeoRecommendations,
   type CeoRecommendation,
   type CeoRecommendationConfidence,
   type CeoRecommendationUrgency,
-} from '../lib/ceoRecommendations'
-import { formatFinanceMoney } from '../lib/finance'
-import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/ceoRecommendations.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

@@ -5,7 +5,7 @@ import type {
   InventoryItem,
   JosSettings,
   OrderRecord,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateAutomationReport,
   completeAutomationRule,
@@ -17,14 +17,14 @@ import {
   type AutomationAlert,
   type AutomationDestination,
   type AutomationRuleView,
-} from '../lib/automationCentre'
+} from '../lib/automationCentre.ts'
 import {
   getAutoBackups,
   getLastOffDeviceExportAt,
   saveAutoBackup,
-} from '../lib/autoBackup'
-import { formatFinanceMoney } from '../lib/finance'
-import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/autoBackup.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { EmptyState, JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

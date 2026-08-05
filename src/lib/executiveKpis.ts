@@ -2,9 +2,9 @@ import type {
   FinanceState,
   InventoryItem,
   OrderRecord,
-} from '../types/inventory'
-import { calculateFinanceSummary } from './finance'
-import { calculateInventoryIntelligence } from './inventoryIntelligence'
+} from '../types/inventory.ts'
+import { calculateFinanceSummary } from './finance.ts'
+import { calculateInventoryIntelligence } from './inventoryIntelligence.ts'
 
 export type ExecutiveConfidence = 'limited' | 'developing' | 'established'
 

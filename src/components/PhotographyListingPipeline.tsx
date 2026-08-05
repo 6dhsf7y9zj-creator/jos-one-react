@@ -4,7 +4,7 @@ import type {
   ListingChecklist,
   ListingPipelineStage,
   PhotoChecklist,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   advancePipeline,
   inferPipelineStage,
@@ -15,8 +15,8 @@ import {
   pipelineReadiness,
   pipelineStages,
   stageToStockStatus,
-} from '../lib/pipeline'
-import { expectedProfit } from '../lib/inventory'
+} from '../lib/pipeline.ts'
+import { expectedProfit } from '../lib/inventory.ts'
 
 type Props = {
   items: InventoryItem[]

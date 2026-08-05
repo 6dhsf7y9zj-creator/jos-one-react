@@ -3,11 +3,11 @@ import type {
   JosSettings,
   OrderRecord,
   StockStatus,
-} from '../types/inventory'
-import { buildCeoReview, type ReviewPriority } from '../lib/ceoReview'
-import { formatFinanceMoney } from '../lib/finance'
-import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui'
-import { calculateCeoRecommendations } from '../lib/ceoRecommendations'
+} from '../types/inventory.ts'
+import { buildCeoReview, type ReviewPriority } from '../lib/ceoReview.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { EmptyState, JosButton, KpiCard, SectionHeader } from '../ui/index.ts'
+import { calculateCeoRecommendations } from '../lib/ceoRecommendations.ts'
 
 type Props = {
   items: InventoryItem[]

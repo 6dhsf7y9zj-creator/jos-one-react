@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { expectedProfit, generateSku, nextStatus } from './inventory'
-import type { InventoryItem } from '../types/inventory'
+import { expectedProfit, generateSku, nextStatus } from './inventory.ts'
+import type { InventoryItem } from '../types/inventory.ts'
 
 const item: InventoryItem = {
   sku: 'JAE-0007',

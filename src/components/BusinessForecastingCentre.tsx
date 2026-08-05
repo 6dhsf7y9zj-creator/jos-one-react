@@ -3,13 +3,13 @@ import type {
   InventoryItem,
   JosSettings,
   OrderRecord,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateBusinessForecast,
   type ForecastScenario,
-} from '../lib/businessForecasting'
-import { formatFinanceMoney } from '../lib/finance'
-import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/businessForecasting.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

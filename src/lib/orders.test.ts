@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { advanceOrder, calculateOrderMetrics } from './orders'
+import { advanceOrder, calculateOrderMetrics } from './orders.ts'
 
 const order = { id: 'O1', sku: 'JAE-1', item: 'Nike hoodie', status: 'Ready to pack', deadline: '' }
 

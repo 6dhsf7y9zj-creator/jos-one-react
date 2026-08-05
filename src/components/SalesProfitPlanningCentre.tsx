@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
-import type { InventoryItem, JosSettings, OrderRecord, SalesPlanningSettings } from '../types/inventory'
-import { calculateSalesProfitPlan, normaliseSalesPlanningSettings, type PlanningAction } from '../lib/salesProfitPlanning'
-import { formatFinanceMoney } from '../lib/finance'
-import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+import type { InventoryItem, JosSettings, OrderRecord, SalesPlanningSettings } from '../types/inventory.ts'
+import { calculateSalesProfitPlan, normaliseSalesPlanningSettings, type PlanningAction } from '../lib/salesProfitPlanning.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 type Props={items:InventoryItem[];orders:OrderRecord[];settings:JosSettings;onChangePlanning:(v:SalesPlanningSettings)=>void;onChangeTarget:(v:number)=>void;onOpenOrders:()=>void;onOpenPipeline:()=>void;onOpenInventory:()=>void;onOpenSourceCheck:()=>void;onOpenFinance:()=>void}
 type View='plan'|'simulator'|'health'|'evidence'
 function action(a:PlanningAction,p:Props){return a.destination==='orders'?p.onOpenOrders:a.destination==='pipeline'?p.onOpenPipeline:a.destination==='inventory'?p.onOpenInventory:a.destination==='sourcecheck'?p.onOpenSourceCheck:p.onOpenFinance}

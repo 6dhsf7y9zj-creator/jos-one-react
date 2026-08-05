@@ -2,15 +2,15 @@ import { describe, expect, it } from 'vitest'
 import type {
   InventoryItem,
   JosSettings,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateLaunchCommandReport,
   createDefaultLaunchCommandSettings,
   normaliseLaunchCommandSettings,
   toggleLaunchTask,
   updateLaunchTargets,
-} from './launchCommand'
-import { createDefaultAutomationSettings } from './automationCentre'
+} from './launchCommand.ts'
+import { createDefaultAutomationSettings } from './automationCentre.ts'
 
 const item = (overrides: Partial<InventoryItem> = {}): InventoryItem => ({
   sku: 'JAE-001',

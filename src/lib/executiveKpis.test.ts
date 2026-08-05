@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { FinanceState, InventoryItem, OrderRecord } from '../types/inventory'
-import { calculateExecutiveKpis } from './executiveKpis'
+import type { FinanceState, InventoryItem, OrderRecord } from '../types/inventory.ts'
+import { calculateExecutiveKpis } from './executiveKpis.ts'
 
 const stock = (overrides: Partial<InventoryItem> = {}): InventoryItem => ({
   sku: 'JAE-001',

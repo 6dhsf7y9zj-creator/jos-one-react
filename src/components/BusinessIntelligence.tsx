@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import type { FinanceState, InventoryItem, StockStatus } from '../types/inventory'
-import { calculateBusinessIntelligence, formatMoney, type IntelligenceInsight } from '../lib/intelligence'
+import type { FinanceState, InventoryItem, StockStatus } from '../types/inventory.ts'
+import { calculateBusinessIntelligence, formatMoney, type IntelligenceInsight } from '../lib/intelligence.ts'
 
 type Props = {
   items: InventoryItem[]

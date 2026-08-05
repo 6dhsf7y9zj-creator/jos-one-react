@@ -5,7 +5,7 @@ import type {
   JosSettings,
   LaunchCommandSettings,
   OrderRecord,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   calculateLaunchCommandReport,
   completeLaunchAutomationReview,
@@ -17,9 +17,9 @@ import {
   type LaunchDestination,
   type LaunchTaskGroup,
   type LaunchTaskView,
-} from '../lib/launchCommand'
-import { formatFinanceMoney } from '../lib/finance'
-import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui'
+} from '../lib/launchCommand.ts'
+import { formatFinanceMoney } from '../lib/finance.ts'
+import { JosButton, KpiCard, NoticeCard, SectionHeader } from '../ui/index.ts'
 
 type Props = {
   items: InventoryItem[]

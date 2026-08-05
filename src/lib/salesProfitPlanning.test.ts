@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { InventoryItem, JosSettings } from '../types/inventory'
-import { calculateSalesProfitPlan, defaultSalesPlanningSettings, normaliseSalesPlanningSettings } from './salesProfitPlanning'
+import type { InventoryItem, JosSettings } from '../types/inventory.ts'
+import { calculateSalesProfitPlan, defaultSalesPlanningSettings, normaliseSalesPlanningSettings } from './salesProfitPlanning.ts'
 const item=(o:Partial<InventoryItem>={}):InventoryItem=>({sku:'A',brand:'Nike',category:'Hoodie',description:'Hoodie',size:'M',condition:'Very Good',status:'Live',grade:'A',purchasePrice:10,expectedSalePrice:40,storageLocation:'A1',pipelineStage:'Live',...o})
 const settings=():JosSettings=>({minimumProfit:15,targetRoi:150,storageLocations:['A1'],monthlyProfitTarget:5000,salesPlanning:defaultSalesPlanningSettings,finance:{openingCash:100,emergencyReserve:0,plannedSourcingBudget:100,taxPlanningRate:20,transactions:[]}})
 describe('Sales & Profit Planning Engine',()=>{

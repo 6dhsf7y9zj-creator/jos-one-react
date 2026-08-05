@@ -5,17 +5,17 @@ import type {
   LaunchCommandSettings,
   LaunchTaskState,
   OrderRecord,
-} from '../types/inventory'
+} from '../types/inventory.ts'
 import {
   completeAutomationRule,
   normaliseAutomationSettings,
-} from './automationCentre'
-import { calculateBusinessForecast } from './businessForecasting'
-import { calculateFinanceSummary } from './finance'
+} from './automationCentre.ts'
+import { calculateBusinessForecast } from './businessForecasting.ts'
+import { calculateFinanceSummary } from './finance.ts'
 import {
   inferPipelineStage,
   pipelineReadiness,
-} from './pipeline'
+} from './pipeline.ts'
 
 export type LaunchTaskGroup = 'marketing' | 'packaging' | 'launch-day'
 export type LaunchTaskStatus = 'complete' | 'overdue' | 'due' | 'upcoming'

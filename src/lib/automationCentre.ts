@@ -6,10 +6,10 @@ import type {
   InventoryItem,
   JosSettings,
   OrderRecord,
-} from '../types/inventory'
-import { calculateCeoRecommendations } from './ceoRecommendations'
-import { calculateFinanceSummary, normaliseFinanceState } from './finance'
-import { calculateInventoryIntelligence } from './inventoryIntelligence'
+} from '../types/inventory.ts'
+import { calculateCeoRecommendations } from './ceoRecommendations.ts'
+import { calculateFinanceSummary, normaliseFinanceState } from './finance.ts'
+import { calculateInventoryIntelligence } from './inventoryIntelligence.ts'
 
 export type AutomationCadence = 'daily' | 'weekly'
 export type AutomationStatus = 'due' | 'overdue' | 'upcoming' | 'snoozed' | 'disabled'

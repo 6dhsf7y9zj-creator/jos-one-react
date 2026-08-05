@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
-import { generateSku } from '../lib/inventory'
-import type { InventoryItem, JosSettings } from '../types/inventory'
+import { generateSku } from '../lib/inventory.ts'
+import type { InventoryItem, JosSettings } from '../types/inventory.ts'
 
 type Props = {
   items: InventoryItem[]

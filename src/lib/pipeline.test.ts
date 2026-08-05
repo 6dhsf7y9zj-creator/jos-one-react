@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { InventoryItem } from '../types/inventory'
+import type { InventoryItem } from '../types/inventory.ts'
 import {
   advancePipeline,
   inferPipelineStage,
   pipelineReadiness,
-} from './pipeline'
+} from './pipeline.ts'
 
 const item: InventoryItem = {
   sku: 'JAE-001',
