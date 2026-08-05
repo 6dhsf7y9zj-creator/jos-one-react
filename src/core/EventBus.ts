@@ -4,6 +4,7 @@ type Listener = (event: BusinessEvent) => void
 
 const listeners = new Set<Listener>()
 const AUDIT_KEY = 'jos-one-core-audit-trail'
+const MAX_AUDIT_EVENTS = 250
 
 function readAudit(): BusinessEvent[] {
   try {
@@ -14,17 +15,21 @@ function readAudit(): BusinessEvent[] {
   }
 }
 
+function writeAudit(events: BusinessEvent[]): void {
+  try {
+    localStorage.setItem(AUDIT_KEY, JSON.stringify(events.slice(0, MAX_AUDIT_EVENTS)))
+  } catch {
+    // Audit persistence must never block a business action.
+  }
+}
+
 export function publishBusinessEvent(event: Omit<BusinessEvent, 'id' | 'occurredAt'>): BusinessEvent {
   const complete: BusinessEvent = {
     ...event,
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     occurredAt: new Date().toISOString(),
   }
-  try {
-    localStorage.setItem(AUDIT_KEY, JSON.stringify([complete, ...readAudit()].slice(0, 100)))
-  } catch {
-    // Audit persistence must never block a business action.
-  }
+  writeAudit([complete, ...readAudit()])
   listeners.forEach(listener => listener(complete))
   return complete
 }
@@ -36,4 +41,16 @@ export function subscribeBusinessEvents(listener: Listener): () => void {
 
 export function getBusinessAuditTrail(): BusinessEvent[] {
   return readAudit()
+}
+
+export function clearBusinessAuditTrail(): void {
+  writeAudit([])
+}
+
+export function getAuditStorageBytes(): number {
+  try {
+    return new Blob([JSON.stringify(readAudit())]).size
+  } catch {
+    return JSON.stringify(readAudit()).length
+  }
 }

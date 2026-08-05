@@ -6,6 +6,10 @@ export type BusinessEventType =
   | 'finance.updated'
   | 'settings.updated'
   | 'backup.restored'
+  | 'diagnostics.checked'
+  | 'audit.exported'
+  | 'audit.cleared'
+  | 'inventory.bulk-updated'
 
 export type BusinessEvent = {
   id: string

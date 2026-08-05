@@ -27,6 +27,7 @@ import { createDefaultLaunchCommandSettings } from './lib/launchCommand.ts'
 import { defaultSalesPlanningSettings } from './lib/salesProfitPlanning.ts'
 import { CoreProvider } from './core/CoreProvider.tsx'
 import { deleteInventoryThroughCore, saveInventoryThroughCore } from './core/JOSCore.ts'
+import { publishBusinessEvent } from './core/EventBus.ts'
 
 const seed: InventoryItem[] = [
   {
@@ -160,6 +161,7 @@ export default function App() {
     setOrders(restoredOrders)
     setSettings(restoredSettings)
     setInventoryFilter(undefined)
+    publishBusinessEvent({ type: 'backup.restored', summary: `Restored backup with ${restoredItems.length} items and ${restoredOrders.length} orders` })
   }
 
   const openInventory = (status?: StockStatus) => {
@@ -206,7 +208,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 3.3.0 SPRINT 3</p>
+            <p className="eyebrow">JOS ONE · VERSION 3.4.0 SPRINT 4</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -433,7 +435,7 @@ export default function App() {
         />
       )}
       {tab === 'diagnostics' && (
-        <CoreDiagnosticsCentre onOpenInventory={openInventoryEdit} />
+        <CoreDiagnosticsCentre onOpenInventory={openInventoryEdit} onOpenBackup={() => changeTab('backup')} />
       )}
 
       {tab === 'backup' && (
