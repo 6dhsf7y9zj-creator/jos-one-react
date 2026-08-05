@@ -1,8 +1,11 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+
 const appSource = readFileSync(new URL('./App.tsx', import.meta.url), 'utf8')
 const inventorySource = readFileSync(new URL('./components/Inventory.tsx', import.meta.url), 'utf8')
 const editorSource = readFileSync(new URL('./components/InventoryEditCentre.tsx', import.meta.url), 'utf8')
+const coreSource = readFileSync(new URL('./core/JOSCore.ts', import.meta.url), 'utf8')
+
 describe('Inventory Edit Centre integration', () => {
   it('replaces modal editing with a dedicated route', () => {
     expect(appSource).toContain("tab === 'inventory-edit'")
@@ -11,10 +14,11 @@ describe('Inventory Edit Centre integration', () => {
     expect(inventorySource).not.toContain('inventory-editor-overlay')
   })
 
-  it('tracks the original SKU and cascades SKU changes', () => {
+  it('tracks the original SKU and cascades SKU changes through JOS Core', () => {
     expect(appSource).toContain('saveEditedItem = (originalSku: string')
-    expect(appSource).toContain('order.sku === originalSku')
-    expect(appSource).toContain('transaction.sku === originalSku')
+    expect(appSource).toContain('saveInventoryThroughCore(items, orders, settings, originalSku, updated)')
+    expect(coreSource).toContain('order.sku === originalSku')
+    expect(coreSource).toContain('transaction.sku === originalSku')
     expect(editorSource).toContain('duplicateSku')
   })
 
