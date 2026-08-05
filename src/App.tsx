@@ -9,6 +9,7 @@ import { Orders } from './components/Orders.tsx'
 import { FinanceCommandCentre } from './components/FinanceCommandCentre.tsx'
 import { BusinessIntelligence } from './components/BusinessIntelligence.tsx'
 import { CoreDiagnosticsCentre } from './components/CoreDiagnosticsCentre.tsx'
+import { ProductionReadinessCentre } from './components/ProductionReadinessCentre.tsx'
 import { PhotographyListingPipeline } from './components/PhotographyListingPipeline.tsx'
 import { OperationsCommandCentre } from './components/OperationsCommandCentre.tsx'
 import { CeoReviewCentre } from './components/CeoReviewCentre.tsx'
@@ -59,7 +60,7 @@ const defaultSettings: JosSettings = {
   },
 }
 
-type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'diagnostics' | 'backup'
+type Tab = 'home' | 'sales-planning' | 'review' | 'recommendations' | 'forecasting' | 'automation' | 'launch-command' | 'inventory' | 'inventory-edit' | 'inventory-intelligence' | 'brand-performance' | 'add' | 'sourcecheck' | 'orders' | 'operations' | 'pipeline' | 'finance' | 'intelligence' | 'diagnostics' | 'production-readiness' | 'backup'
 
 function readStored<T>(key: string, fallback: T): T {
   try {
@@ -198,6 +199,7 @@ export default function App() {
     finance: 'Finance Command Centre',
     intelligence: 'Business Intelligence',
     diagnostics: 'Core Diagnostics Centre',
+    'production-readiness': 'Production Readiness Centre',
     backup: 'Backup Centre',
   }
 
@@ -208,7 +210,7 @@ export default function App() {
         <div className="jos-header-identity">
           <img src={`${import.meta.env.BASE_URL}the-jae-edit-logo.png`} alt="The JAE Edit" />
           <div className="app-title">
-            <p className="eyebrow">JOS ONE · VERSION 3.4.0 SPRINT 4</p>
+            <p className="eyebrow">JOS ONE · VERSION 3.5.0 SPRINT 5</p>
             <h1>{titles[tab]}</h1>
             <p className="header-date">
               {new Date().toLocaleDateString('en-GB', {
@@ -438,6 +440,18 @@ export default function App() {
         <CoreDiagnosticsCentre onOpenInventory={openInventoryEdit} onOpenBackup={() => changeTab('backup')} />
       )}
 
+      {tab === 'production-readiness' && (
+        <ProductionReadinessCentre
+          items={items}
+          orders={orders}
+          settings={settings}
+          onOpenDiagnostics={() => changeTab('diagnostics')}
+          onOpenBackup={() => changeTab('backup')}
+          onOpenInventory={() => openInventory()}
+          onOpenFinance={() => changeTab('finance')}
+        />
+      )}
+
       {tab === 'backup' && (
         <BackupCenter
           items={items}
@@ -540,6 +554,9 @@ export default function App() {
               </button>
               <button type="button" onClick={() => changeTab('diagnostics')}>
                 <span>◇</span><strong>Core Diagnostics</strong><small>Data Hub, relationships and audit trail</small>
+              </button>
+              <button type="button" onClick={() => changeTab('production-readiness')}>
+                <span>✓</span><strong>Production Readiness</strong><small>Release gates, recovery and acceptance control</small>
               </button>
               <button type="button" onClick={() => changeTab('backup')}>
                 <span>⇅</span><strong>Backup Centre</strong><small>Protect and restore business data</small>

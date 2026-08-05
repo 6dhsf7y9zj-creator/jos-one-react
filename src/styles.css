@@ -6175,3 +6175,34 @@ button.jos-kpi-card { width: 100%; }
 .audit-toolbar span { flex: 1 1 100%; color: #7c6c60; font-size: .85rem; }
 .audit-toolbar button { border: 1px solid #cfbb91; border-radius: 999px; background: #fffaf1; color: #4d2f21; padding: .55rem .75rem; font-weight: 700; }
 @media (max-width: 520px) { .diagnostics-actions { grid-template-columns: 1fr; } }
+
+/* Sprint 5 — Production Readiness Centre */
+.readiness-centre { padding-bottom: 9rem; }
+.readiness-hero { margin: 1.5rem; padding: 2rem; border-radius: 2rem; display: flex; gap: 1.5rem; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #4b2818, #6a3b24); color: #fff8ea; }
+.readiness-hero h2 { margin: .35rem 0 .75rem; font-family: Georgia, serif; font-size: clamp(2rem, 8vw, 3.4rem); line-height: .98; }
+.readiness-hero p { max-width: 34rem; }
+.readiness-hero.status-ready { background: linear-gradient(135deg, #315c3d, #477653); }
+.readiness-hero.status-conditional { background: linear-gradient(135deg, #6c4a15, #9a6b20); }
+.readiness-score { min-width: 7rem; text-align: center; padding: 1rem; border: 1px solid rgba(255,255,255,.35); border-radius: 1.4rem; background: rgba(255,255,255,.08); }
+.readiness-score strong { display: block; font-family: Georgia, serif; font-size: 3.4rem; line-height: .9; }
+.readiness-score span, .readiness-score small { display: block; }
+.readiness-summary { margin: 0 1.5rem 1.5rem; }
+.readiness-panel, .readiness-actions { margin: 1.5rem; }
+.readiness-gates { display: grid; gap: .8rem; }
+.readiness-gate { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: .85rem; align-items: center; padding: 1rem; border: 1px solid #dbc49b; border-radius: 1.2rem; background: rgba(255,255,255,.42); }
+.readiness-gate h3 { margin: 0 0 .2rem; }
+.readiness-gate p, .readiness-gate small { margin: 0; display: block; }
+.readiness-gate small { margin-top: .35rem; font-weight: 700; }
+.gate-indicator { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border-radius: 50%; font-weight: 900; }
+.gate-pass .gate-indicator { background: #dcebdd; color: #2f6b3e; }
+.gate-warning .gate-indicator { background: #f5e5b8; color: #8a5a00; }
+.gate-fail .gate-indicator { background: #f5d6cf; color: #a33b2d; }
+.readiness-gate button { border-radius: 999px; padding: .65rem .9rem; }
+.readiness-actions .button-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1rem; }
+@media (max-width: 620px) {
+  .readiness-hero { align-items: flex-start; }
+  .readiness-score { min-width: 5.8rem; }
+  .readiness-score strong { font-size: 2.7rem; }
+  .readiness-gate { grid-template-columns: 2.5rem 1fr; }
+  .readiness-gate button { grid-column: 2; justify-self: start; }
+}
